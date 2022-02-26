@@ -23,7 +23,7 @@ function getRandomNumber(min, max) {
 * @param {number} decimalPlaces - Число знаков после зяпятой.
 * @return {number} - Число с плавающей точкой
 */
-function getRandomFloat(min, max, decimalPlaces) {
+function getRandomFloat(min, max, decimalPlaces = 1) {
   if (min >= max) {
     return 0;
   }
