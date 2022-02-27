@@ -224,5 +224,3 @@ const createAd = () => {
 };
 
 const similarAds = Array.from({length: OFFERS_COUNT}, createAd);
-
-console.log(similarAds);
