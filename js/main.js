@@ -102,8 +102,61 @@ const getRandomFloat = (a, b, decimalPlaces = 1) => {
   return +result.toFixed(decimalPlaces);
 };
 
+/**
+* Функция, возвращающая случайный элемент массива.
+*
+* @param {array} elements - Массив с элементами.
+* @return {object} - Элемент массива.
+*/
+const getRandomArrayElement = (elements) => {
+  const result = elements[getRandomNumber(0, elements.length - 1)];
+  return result;
+};
+
+/**
+* Функция, преобразующая число от 0 до 99 в строку.
+* В формате 01, 02, ... 99.
+*
+* @param {number} number - положительное целое число.
+* @return {string} - строка с числом.
+*/
+const getNumber = (number) => {
+  const result = (`0${number}`).slice(-2);
+  return result;
+};
+
+/**
+* Функция, генерирующая массив случайной длины из списка значений,
+* без повторений.
+*
+* @param {array} list - список значений.
+* @return {array} - массив значений.
+*/
+const getRandomArrayByList = function (list) {
+  const count = getRandomNumber(0, list.length - 1);
+  const selectionList = list.slice();
+  const result = [];
+
+  for (let i = 0; i < count; i++) {
+    const randomIndex = getRandomNumber(0, selectionList.length - 1);
+    result.push(selectionList[randomIndex]);
+    selectionList.splice(randomIndex, 1);
+  }
+
+  return result;
+};
+
 //Вызов функции для исключения ошибки esLint
 getRandomNumber(1, 10);
 
 //Вызов функции для исключения ошибки esLint
 getRandomFloat(1, 10, 2);
+
+//Вызов функции для исключения ошибки esLint
+getRandomArrayElement(FEATURES);
+
+//Вызов функции для исключения ошибки esLint
+getNumber();
+
+//Вызов функции для исключения ошибки esLint
+getRandomArrayByList(FEATURES);
