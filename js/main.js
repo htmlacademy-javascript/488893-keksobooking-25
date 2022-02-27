@@ -41,19 +41,24 @@ const TITLES = [
   'Домик с приведениями на холму.',
   'Трехкомнатная квартира на окране далеко от метро. ',
   'Апартаменты с прекрасным видом на торговый центр.',
-  'Апартаменты на мансарде',
-  'Пентхаус в небоскребе. Лифт не работает.'
+  'Апартаменты на мансарде.',
+  'Пентхаус в небоскребе.',
+  'Студия в центре.',
+  'Домик на окраине.',
+  'Номер в отеле.',
+  'Пентхаус в небоскребе. Лифт не работает.',
+  'Небольшая студия с удобным расположением.'
 ];
 
 const DESCRIPTIONS = [
-  'Описание 1',
-  'Описание 2',
-  'Описание 3',
-  'Описание 4',
-  'Описание 5',
-  'Описание 6',
-  'Описание 7',
-  'Описание 8'
+  'Кухня, две спальни, совмещенная ванная комната.',
+  'Евроремонт, новая мебель, большая кухня. Все готово для заселения.',
+  'Отдельное рабочее место, большая кровать, небольшая кухня.',
+  'На рассветах и закатах комнаты сверкают яркими красками.',
+  'Все удобства на улице, для отопления нужно использовать дрова и камин.',
+  'Около дома располоена дискотека. Но вы не волнуйтесь мы выдадим вам беруши.',
+  'Отсуствует подъездная дорога, порковка. Добраться можно только пешком 4 км. Присутсвует дворецкий, но последнее время его не видно. Иногда заходят горничные, но после них пропадает столовое серебро - будьте осторожны.',
+  'Клевая хата друган, заезжай не преживай, все будет чики пуки. Только короче, предоплата полная. звани.'
 ];
 
 const PHOTOS = [
@@ -62,19 +67,37 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
 ];
 
-const LOCATION_LAT = {
+const LOCATION_LAT_RANGE = {
   min: 35.65000,
   max: 35.70000
 };
 
-const LOCATION_LNG = {
+const LOCATION_LNG_RANGE = {
   min: 139.70000,
   max: 139.80000
 };
 
+const PRICE_RANGE = {
+  min: 0,
+  max: 9999
+};
+
+const ROOM_RANGE = {
+  min: 1,
+  max: 5
+};
+
+const GUEST_RANGE = {
+  min: 1,
+  max: 10
+};
+
+const avatarUrlNumbers = Array.from({ length: OFFERS_COUNT }, (v, k) => k+1);
+
 /**
-* Функция, возвращающая случайное целое число из переданного диапазона включительно.
-* источник: https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+* Функция возвращающая случайное целое число из переданного диапазона
+* включительно.
+* источник: https://up.htmlacademy.ru/profession/fullstack/2/javascript/25/tasks/7
 *
 * @param {number} a - Значение диапазона (либо минимальное либо максимальное).
 * @param {number} b - Значение диапазона (либо минимальное либо максимальное).
@@ -88,10 +111,12 @@ const getRandomNumber = (a, b) => {
 };
 
 /**
-* Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
+* Функция возвращающая случайное число с плавающей точкой из переданного
+* диапазона включительно.
+* источник: https://up.htmlacademy.ru/profession/fullstack/2/javascript/25/tasks/7
 *
-* @param {number} min - Минимальное значение диапазона.
-* @param {number} max - Максимальное значение диапазона.
+* @param {number} a - Значение диапазона (либо минимальное либо максимальное).
+* @param {number} b - Значение диапазона (либо минимальное либо максимальное).
 * @param {number} decimalPlaces - Число знаков после зяпятой.
 * @return {number} - Число с плавающей точкой
 */
@@ -103,7 +128,7 @@ const getRandomFloat = (a, b, decimalPlaces = 1) => {
 };
 
 /**
-* Функция, возвращающая случайный элемент массива.
+* Функция возвращающая случайный элемент массива.
 *
 * @param {array} elements - Массив с элементами.
 * @return {object} - Элемент массива.
@@ -114,25 +139,13 @@ const getRandomArrayElement = (elements) => {
 };
 
 /**
-* Функция, преобразующая число от 0 до 99 в строку.
-* В формате 01, 02, ... 99.
-*
-* @param {number} number - положительное целое число.
-* @return {string} - строка с числом.
-*/
-const getNumber = (number) => {
-  const result = (`0${number}`).slice(-2);
-  return result;
-};
-
-/**
-* Функция, генерирующая массив случайной длины из списка значений,
-* без повторений.
+* Функция возвращающая массив случайной длины из списка значений.
+* (без повторений).
 *
 * @param {array} list - список значений.
 * @return {array} - массив значений.
 */
-const getRandomArrayByList = function (list) {
+const getRandomList = (list) => {
   const count = getRandomNumber(0, list.length - 1);
   const selectionList = list.slice();
   const result = [];
@@ -146,17 +159,70 @@ const getRandomArrayByList = function (list) {
   return result;
 };
 
-//Вызов функции для исключения ошибки esLint
-getRandomNumber(1, 10);
+/**
+* Функция возвращающая массив случайной длины из списка значений.
+* (с повторениями).
+*
+* @param {array} list - список значений.
+* @param {number} maxRange - максимальный размер длинны массива.
+* @return {array} - массив значений.
+*/
+const getRandomArrayList = (list, maxRange = 10) => {
+  const count = getRandomNumber(0, maxRange);
+  const result = Array.from({ length: count }, () => list[getRandomNumber(0, list.length - 1)]);
 
-//Вызов функции для исключения ошибки esLint
-getRandomFloat(1, 10, 2);
+  return result;
+};
 
-//Вызов функции для исключения ошибки esLint
-getRandomArrayElement(FEATURES);
+/**
+ * Функция возвращающая случайный неповторяющийся URL аватарки автора.
+ * Номер аварарки - неповторяюшиеся число от 01 до 10.
+ *
+ * @param {array} avatarNumberList - массив с возможными номерами аватарки.
+ * @returns {string} - строка с URL аватарки.
+ */
+const  getAvatarUrl = (avatarNumberList) => {
+  const randomIndex = getRandomNumber(0, avatarNumberList.length - 1);
+  const rendomNumber = avatarNumberList[randomIndex];
+  avatarNumberList.splice(randomIndex, 1);
+  return `img/avatars/user/${(`0${rendomNumber}`).slice(-2)}.png`;
+};
 
-//Вызов функции для исключения ошибки esLint
-getNumber();
+/**
+* Функция возвращающая обьект "Обявления" заполненный случайными данными.
+*
+* @return {object} - Обьект "Обявления".
+*/
+const createAd = () => {
+  const locationLat = getRandomFloat(LOCATION_LAT_RANGE.min, LOCATION_LAT_RANGE.max, 5);
+  const locationLng = getRandomFloat(LOCATION_LNG_RANGE.min, LOCATION_LNG_RANGE.max, 5);
 
-//Вызов функции для исключения ошибки esLint
-getRandomArrayByList(FEATURES);
+  const result = {
+    author: {
+      avatar: getAvatarUrl(avatarUrlNumbers),
+    },
+    offer: {
+      title: getRandomArrayElement(TITLES),
+      address: `${locationLat}, ${locationLng}`,
+      price: getRandomNumber(PRICE_RANGE.min, PRICE_RANGE.max),
+      type: getRandomArrayElement(TYPES),
+      rooms: getRandomNumber(ROOM_RANGE.min, ROOM_RANGE.max),
+      guests: getRandomNumber(GUEST_RANGE.min, GUEST_RANGE.max),
+      checkin: getRandomArrayElement(CHEK_IN),
+      checkout: getRandomArrayElement(CHEK_OUT),
+      features: getRandomList(FEATURES),
+      description: getRandomArrayElement(DESCRIPTIONS),
+      photos: getRandomArrayList(PHOTOS),
+    },
+    location: {
+      lat: locationLat,
+      lng: locationLng,
+    }
+  };
+
+  return result;
+};
+
+const similarAds = Array.from({length: OFFERS_COUNT}, createAd);
+
+console.log(similarAds);
