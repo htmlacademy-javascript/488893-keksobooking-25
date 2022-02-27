@@ -224,3 +224,7 @@ const createAd = () => {
 };
 
 const similarAds = Array.from({length: OFFERS_COUNT}, createAd);
+
+//для исключения ошибки EsLint
+const someFunc = () => similarAds;
+someFunc();
