@@ -111,9 +111,9 @@ const  getAvatarUrl = (avatarNumberList) => {
 };
 
 /**
- * Функция возвращающая обьект "Обявления" заполненный случайными данными.
+ * Функция возвращающая обьект "Объявления" заполненный случайными данными.
  *
- * @return {object} - Обьект "Обявления".
+ * @return {object} - Обьект "Объявления".
  */
 const createAd = () => {
   const locationLat = getRandomFloat(LOCATION_LAT_RANGE.min, LOCATION_LAT_RANGE.max, 5);
