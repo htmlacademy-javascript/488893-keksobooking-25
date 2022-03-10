@@ -107,7 +107,7 @@ const  getAvatarUrl = (avatarNumberList) => {
   const randomIndex = getRandomNumber(0, avatarNumberList.length - 1);
   const rendomNumber = avatarNumberList[randomIndex];
   avatarNumberList.splice(randomIndex, 1);
-  return `img/avatars/user/${(`0${rendomNumber}`).slice(-2)}.png`;
+  return `img/avatars/user${(`0${rendomNumber}`).slice(-2)}.png`;
 };
 
 /**
