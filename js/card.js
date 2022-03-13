@@ -41,7 +41,7 @@ const renderCard = ({author, offer}) => {
   const cardFragment = document.createDocumentFragment();
   const card = cardTemplate.cloneNode(true);
 
-  card.querySelector('.popup__avatar').src = `${author.avatar}`;
+  card.querySelector('.popup__avatar').src = author.avatar;
   card.querySelector('.popup__title').textContent = offer.title;
 
   if (offer.address) {
