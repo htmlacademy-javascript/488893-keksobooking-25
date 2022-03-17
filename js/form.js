@@ -115,6 +115,30 @@ function onRoomChange () {
 
 roomField.addEventListener('change', onRoomChange);
 
+/* Валидация Времени заезда и Времени выезда (ТЗ 3.5)
+   ========================================================================== */
+
+const timeinField = form.querySelector('#timein');
+const timeoutField = form.querySelector('#timeout');
+
+/**
+ * Изменение времени выезда при изменении времени заезда.
+ */
+function onTimeInChange () {
+  timeinField.value = timeoutField.value;
+}
+
+/**
+ * Изменение времени заезда при изменении времени выезда.
+ */
+function onTimeOutChange () {
+  timeoutField.value = timeinField.value;
+}
+
+timeinField.addEventListener('change', onTimeOutChange);
+timeoutField.addEventListener('change', onTimeInChange);
+
+
 /* Запуск валидации
   ========================================================================== */
 
