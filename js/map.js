@@ -48,6 +48,34 @@ mainPinMarker.on('moveend', (evt) => {
   address.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
 });
 
+const markerIcon = L.icon({
+  iconUrl: './img/pin.svg',
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+});
+
+const addOffersMarkers = (mapLayer) => {
+  similarAds.forEach(({location, offer, author}) => {
+    const lat = location.lat;
+    const lng = location.lng;
+    const marker = L.marker(
+      {
+        lat,
+        lng,
+      },
+      {
+        markerIcon,
+      }
+    );
+
+    marker
+      .addTo(mapLayer)
+      .bindPopup(renderCard(author, offer));
+  });
+};
+
+addOffersMarkers(map);
+
 resetButton.addEventListener('click', () => {
   mainPinMarker.setLatLng({
     lat: 35.6574,
@@ -59,28 +87,6 @@ resetButton.addEventListener('click', () => {
     lng: 139.7785,
   }, 10)
     .setZoom(12.45);
-});
 
-const markerIcon = L.icon({
-  iconUrl: './img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
-});
-
-similarAds.forEach(({location, offer, author}) => {
-  const lat = location.lat;
-  const lng = location.lng;
-  const marker = L.marker(
-    {
-      lat,
-      lng,
-    },
-    {
-      markerIcon,
-    }
-  );
-
-  marker
-    .addTo(map)
-    .bindPopup(renderCard(author, offer));
+  addOffersMarkers(map);
 });
