@@ -1,2 +1,5 @@
-import './form.js';
-import './map.js';
+import {startValidation} from './form.js';
+import {createMap} from './map.js';
+
+createMap();
+startValidation();
