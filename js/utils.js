@@ -1,4 +1,7 @@
-// Модуль c общими функциями проекта.
+const ESC_ALL_BROWSERS = 'Escape';
+const ESC_IE = 'Esc';
+
+const isEscEvent = (evt) => evt.key === ESC_ALL_BROWSERS || evt.key === ESC_IE;
 
 /**
 * Функция возвращающая случайное целое число из переданного диапазона
@@ -80,4 +83,11 @@ const getRandomArrayList = (list, maxRange = 10) => {
   return result;
 };
 
-export {getRandomNumber, getRandomFloat, getRandomArrayElement, getRandomList, getRandomArrayList};
+export {
+  getRandomNumber,
+  getRandomFloat,
+  getRandomArrayElement,
+  getRandomList,
+  getRandomArrayList,
+  isEscEvent
+};
