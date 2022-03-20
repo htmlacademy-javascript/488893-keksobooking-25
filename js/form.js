@@ -16,7 +16,7 @@ const titleField = form.querySelector('#title');
 
 /**
  * Валидация длины заголовка
- * @param {number} value - заголовок введенный пользователем
+ * @param {string} value - заголовок введенный пользователем
  * @returns {boolean} - результат валидации
  */
 function validateTitle (value) {
@@ -71,9 +71,6 @@ noUiSlider.create(sliderElement, {
   connect: 'lower',
   format: {
     to: function (value) {
-      if (Number.isInteger(value)) {
-        return value.toFixed(0);
-      }
       return value.toFixed(0);
     },
     from: function (value) {
@@ -124,7 +121,7 @@ const guestRestrictions = {
 };
 
 /**
- * Валидация внестимости гостей в соответствии с выбранным количеством комнат.
+ * Валидация вместимости гостей в соответствии с выбранным количеством комнат.
  * @returns {boolean} - результа валидации
  */
 function validateCapacity () {
