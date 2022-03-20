@@ -14,8 +14,7 @@ const map = L.map('map-canvas')
   .setView({
     lat: 35.6574,
     lng: 139.7785,
-  }, 10)
-  .setZoom(12.45);
+  }, 10);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -85,8 +84,7 @@ resetButton.addEventListener('click', () => {
   map.setView({
     lat: 35.6574,
     lng: 139.7785,
-  }, 10)
-    .setZoom(12.45);
+  }, 10);
 
   addOffersMarkers(map);
 });
