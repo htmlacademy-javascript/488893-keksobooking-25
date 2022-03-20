@@ -58,7 +58,6 @@ const renderFeatures = (containerBlock, features) => {
  * @return {object} - DOM фрагмент карточкой объявления.
  */
 const renderCard = (author, offer) => {
-  const cardFragment = document.createDocumentFragment();
   const card = cardTemplate.cloneNode(true);
 
   card.querySelector('.popup__avatar').src = author.avatar;
@@ -116,8 +115,7 @@ const renderCard = (author, offer) => {
     card.querySelector('.popup__photos').remove();
   }
 
-  cardFragment.appendChild(card);
-  return cardFragment;
+  return card;
 };
 
 export {renderCard};
