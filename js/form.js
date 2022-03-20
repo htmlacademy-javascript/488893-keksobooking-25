@@ -12,20 +12,18 @@ const pristine = new Pristine(form, {
 /* Валидация заголовка объявления (ТЗ 3.1)
    ========================================================================== */
 
+const titleField = form.querySelector('#title');
+
 /**
  * Валидация длины заголовка
- * @param {number} value - длина заголовка введенного пользователем
+ * @param {number} value - заголовок введенный пользователем
  * @returns {boolean} - результат валидации
  */
 function validateTitle (value) {
   return value.length >= 30 && value.length <= 100;
 }
 
-pristine.addValidator(
-  form.querySelector('#title'),
-  validateTitle,
-  'От 30 до 100 символов'
-);
+pristine.addValidator(titleField, validateTitle, 'От 30 до 100 символов.');
 
 /* Валидация Цены за ночь (ТЗ 3.2, 3.3)
    ========================================================================== */
@@ -56,7 +54,7 @@ function validatePrice (value) {
  */
 function getPriceErrorMessage () {
   const unit = form.querySelector('#type');
-  return `Цена должна быть в интервале от ${minPrice[unit.value]} до ${MAX_PRICE}`;
+  return `Цена от ${minPrice[unit.value]} до ${MAX_PRICE}`;
 }
 
 pristine.addValidator(priceField, validatePrice, getPriceErrorMessage);
@@ -98,9 +96,9 @@ function validateCapacity () {
  */
 function getCapacityErrorMessage () {
   if (roomField.value === '100') {
-    return 'В 100 комнатах нельзя размещать гостей';
+    return 'Комнаты не для гостей';
   }
-  return `В ${roomField.value} ${(roomField.value === '1') ? 'комнате' : 'комнатах'} можно разместить не более ${guestRestrictions[roomField.value][0]} ${(guestRestrictions[roomField.value][0] === '1') ? 'гостя' : 'гостей'}`;
+  return `${(roomField.value === '1') ? 'Комната' : 'Комнаты'} для ${guestRestrictions[roomField.value][0]} ${(guestRestrictions[roomField.value][0] === '1') ? 'гостя' : 'гостей'} максимум`;
 }
 
 pristine.addValidator(capacityField, validateCapacity, getCapacityErrorMessage);
@@ -142,7 +140,11 @@ timeoutField.addEventListener('change', onTimeInChange);
 /* Запуск валидации
   ========================================================================== */
 
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+const startValidation = () => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    pristine.validate();
+  });
+};
+
+export {startValidation};
