@@ -28,7 +28,9 @@ pristine.addValidator(titleField, validateTitle, 'От 30 до 100 символ�
 /* Валидация Цены за ночь (ТЗ 3.2, 3.3)
    ========================================================================== */
 
+const sliderElement = document.querySelector('.ad-form__slider');
 const priceField = form.querySelector('#price');
+const typeField = form.querySelector('#type');
 const MAX_PRICE = 100000;
 const minPrice = {
   'bungalow': 0,
@@ -59,15 +61,54 @@ function getPriceErrorMessage () {
 
 pristine.addValidator(priceField, validatePrice, getPriceErrorMessage);
 
+noUiSlider.create(sliderElement, {
+  range: {
+    min: minPrice[typeField.value],
+    max: MAX_PRICE,
+  },
+  start: minPrice[typeField.value],
+  step: 100,
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      if (Number.isInteger(value)) {
+        return value.toFixed(0);
+      }
+      return value.toFixed(0);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+});
+
+sliderElement.noUiSlider.on('update', () => {
+  priceField.value = sliderElement.noUiSlider.get();
+});
+
+/**
+ * Перезапуск валидации "Цены за ночь" при обновлении типа жилья
+ */
+function onTypeChange () {
+  priceField.placeholder = minPrice[this.value];
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      min: minPrice[typeField.value],
+      max: MAX_PRICE,
+    }
+  });
+  pristine.validate(priceField);
+}
+
 /**
  * Перезапуск валидации "Цены за ночь" при обновлении типа жилья
  */
 function onPriceChange () {
-  priceField.placeholder = minPrice[this.value];
-  pristine.validate(priceField);
+  sliderElement.noUiSlider.set(this.value);
 }
 
-form.querySelector('#type').addEventListener('change', onPriceChange);
+typeField.addEventListener('change', onTypeChange);
+priceField.addEventListener('change', onPriceChange);
 
 /* Валидация Количества комнат и гостей (ТЗ 3.2, 3.3)
    ========================================================================== */
