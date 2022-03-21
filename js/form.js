@@ -12,25 +12,25 @@ const pristine = new Pristine(form, {
 /* Валидация заголовка объявления (ТЗ 3.1)
    ========================================================================== */
 
+const titleField = form.querySelector('#title');
+
 /**
  * Валидация длины заголовка
- * @param {number} value - длина заголовка введенного пользователем
+ * @param {string} value - заголовок введенный пользователем
  * @returns {boolean} - результат валидации
  */
 function validateTitle (value) {
   return value.length >= 30 && value.length <= 100;
 }
 
-pristine.addValidator(
-  form.querySelector('#title'),
-  validateTitle,
-  'От 30 до 100 символов'
-);
+pristine.addValidator(titleField, validateTitle, 'От 30 до 100 символов.');
 
 /* Валидация Цены за ночь (ТЗ 3.2, 3.3)
    ========================================================================== */
 
+const sliderElement = document.querySelector('.ad-form__slider');
 const priceField = form.querySelector('#price');
+const typeField = form.querySelector('#type');
 const MAX_PRICE = 100000;
 const minPrice = {
   'bungalow': 0,
@@ -56,20 +56,56 @@ function validatePrice (value) {
  */
 function getPriceErrorMessage () {
   const unit = form.querySelector('#type');
-  return `Цена должна быть в интервале от ${minPrice[unit.value]} до ${MAX_PRICE}`;
+  return `Цена от ${minPrice[unit.value]} до ${MAX_PRICE}`;
 }
 
 pristine.addValidator(priceField, validatePrice, getPriceErrorMessage);
+
+noUiSlider.create(sliderElement, {
+  range: {
+    min: minPrice[typeField.value],
+    max: MAX_PRICE,
+  },
+  start: minPrice[typeField.value],
+  step: 100,
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      return value.toFixed(0);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+});
+
+sliderElement.noUiSlider.on('update', () => {
+  priceField.value = sliderElement.noUiSlider.get();
+});
+
+/**
+ * Перезапуск валидации "Цены за ночь" при обновлении типа жилья
+ */
+function onTypeChange () {
+  priceField.placeholder = minPrice[this.value];
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      min: minPrice[typeField.value],
+      max: MAX_PRICE,
+    }
+  });
+  pristine.validate(priceField);
+}
 
 /**
  * Перезапуск валидации "Цены за ночь" при обновлении типа жилья
  */
 function onPriceChange () {
-  priceField.placeholder = minPrice[this.value];
-  pristine.validate(priceField);
+  sliderElement.noUiSlider.set(this.value);
 }
 
-form.querySelector('#type').addEventListener('change', onPriceChange);
+typeField.addEventListener('change', onTypeChange);
+priceField.addEventListener('change', onPriceChange);
 
 /* Валидация Количества комнат и гостей (ТЗ 3.2, 3.3)
    ========================================================================== */
@@ -85,7 +121,7 @@ const guestRestrictions = {
 };
 
 /**
- * Валидация внестимовти гостей в соответствии с выбранным количеством комнат.
+ * Валидация вместимости гостей в соответствии с выбранным количеством комнат.
  * @returns {boolean} - результа валидации
  */
 function validateCapacity () {
@@ -98,9 +134,9 @@ function validateCapacity () {
  */
 function getCapacityErrorMessage () {
   if (roomField.value === '100') {
-    return 'В 100 комнатах нельзя размещать гостей';
+    return 'Комнаты не для гостей';
   }
-  return `В ${roomField.value} ${(roomField.value === '1') ? 'комнате' : 'комнатах'} можно разместить не более ${guestRestrictions[roomField.value][0]} ${(guestRestrictions[roomField.value][0] === '1') ? 'гостя' : 'гостей'}`;
+  return `${(roomField.value === '1') ? 'Комната' : 'Комнаты'} для ${guestRestrictions[roomField.value][0]} ${(guestRestrictions[roomField.value][0] === '1') ? 'гостя' : 'гостей'} максимум`;
 }
 
 pristine.addValidator(capacityField, validateCapacity, getCapacityErrorMessage);
@@ -142,7 +178,11 @@ timeoutField.addEventListener('change', onTimeInChange);
 /* Запуск валидации
   ========================================================================== */
 
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+const startValidation = () => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    pristine.validate();
+  });
+};
+
+export {startValidation};

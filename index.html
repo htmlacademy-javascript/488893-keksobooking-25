@@ -5,6 +5,8 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="leaflet/leaflet.css" />
+  <link rel="stylesheet" href="nouislider/nouislider.css" />
   <title>Кексобукинг</title>
 </head>
 <body>
@@ -87,7 +89,7 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="title">Заголовок объявления</label>
-          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" required data-pristine-required-message="Поле обязательно для заполнеия">
+          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" required data-pristine-required-message="Поле обязательно">
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
@@ -105,7 +107,7 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="price">Цена за ночь, руб.</label>
-          <input id="price" name="price" type="number" placeholder="5000" required data-pristine-required-message="Поле обязательно для заполнеия">
+          <input id="price" name="price" type="number" placeholder="5000" required data-pristine-required-message="Поле обязательно">
           <div class="ad-form__slider"></div>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--time">
@@ -232,6 +234,8 @@
   </template>
   
   <script src="pristine/pristine.min.js"></script>
+  <script src="leaflet/leaflet.js"></script>
+  <script src="nouislider/nouislider.js"></script>
   <script src="/js/main.js" type="module"></script>
 </body>
 </html>

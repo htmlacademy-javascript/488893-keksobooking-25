@@ -145,6 +145,6 @@ const createAd = () => {
   return result;
 };
 
-const similarAds = Array.from({length: OFFERS_COUNT}, createAd);
+const offersData = Array.from({length: OFFERS_COUNT}, createAd);
 
-export {similarAds};
+export {offersData};

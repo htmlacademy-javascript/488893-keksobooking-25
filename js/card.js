@@ -57,8 +57,7 @@ const renderFeatures = (containerBlock, features) => {
  * @param {object} offer - Обьект с данными объявления.
  * @return {object} - DOM фрагмент карточкой объявления.
  */
-const renderCard = ({author, offer}) => {
-  const cardFragment = document.createDocumentFragment();
+const renderCard = (author, offer) => {
   const card = cardTemplate.cloneNode(true);
 
   card.querySelector('.popup__avatar').src = author.avatar;
@@ -116,24 +115,7 @@ const renderCard = ({author, offer}) => {
     card.querySelector('.popup__photos').remove();
   }
 
-  cardFragment.appendChild(card);
-  return cardFragment;
+  return card;
 };
 
-/**
- * Функция генерирующая карточки объявления для вставки в DOM.
- *
- * @param {object} data - Обьект с данными карточек объявлений.
- * @return {object} - DOM фрагмент с карточками объявлений.
- */
-const renderCards = (data) => {
-  const cardsFragment = document.createDocumentFragment();
-
-  data.forEach((element) => {
-    cardsFragment.appendChild(renderCard(element));
-  });
-
-  return cardsFragment;
-};
-
-export {renderCard, renderCards};
+export {renderCard};
