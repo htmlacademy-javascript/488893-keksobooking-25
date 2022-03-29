@@ -1,2 +1,9 @@
-// Модуль работы с сервером, отправка и получение данных
-// Пункты ТЗ: 2.3, 2.4, 5.1, 5.2.
+const getData = (onSuccess) => {
+  fetch('https://25.javascript.pages.academy/keksobooking/data')
+    .then((response) => response.json())
+    .then((offers) => {
+      onSuccess(offers);
+    });
+};
+
+export {getData};

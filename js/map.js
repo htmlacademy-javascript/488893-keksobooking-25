@@ -1,5 +1,4 @@
 import {setInactivePage, setActivePage} from './page-state.js';
-import {offersData} from './data.js';
 import {renderCard} from './card.js';
 
 setInactivePage();
@@ -75,7 +74,7 @@ const addOffersMarkers = (layer, data) => {
 /* Создание карты и меток
   ========================================================================== */
 
-const createMap = () => {
+const createMap = (offersData) => {
   filterLayer.addTo(map);
   mainPinMarker.addTo(map);
   addOffersMarkers(map, offersData);

@@ -96,7 +96,7 @@ const renderCard = (author, offer) => {
   const featuresContainer = card.querySelector('.popup__features');
   const featureList = featuresContainer.querySelectorAll('.popup__feature');
 
-  if (offer.features.length !== 0) {
+  if (offer.features) {
     renderFeatures(featureList, offer.features);
   } else {
     featuresContainer.remove();
@@ -109,7 +109,7 @@ const renderCard = (author, offer) => {
   }
 
   card.querySelector('.popup__photos').innerHTML = '';
-  if (offer.photos.length !== 0) {
+  if (offer.photos) {
     card.querySelector('.popup__photos').appendChild(renderPhotos(offer.photos));
   } else {
     card.querySelector('.popup__photos').remove();
