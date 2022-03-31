@@ -179,7 +179,7 @@ function onTimeOutChange () {
 timeinField.addEventListener('change', onTimeOutChange);
 timeoutField.addEventListener('change', onTimeInChange);
 
-/* Запуск валидации
+/* Блокировка кнопки при отправке данных на сервер
   ========================================================================== */
 
 const submitButton = form.querySelector('.ad-form__submit');
@@ -200,13 +200,13 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
-
 /* Запуск валидации
   ========================================================================== */
 
 const startValidation = (onSuccess) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
+    const formData = new FormData(evt.target);
     const isValid = pristine.validate();
     if (isValid) {
       blockSubmitButton();
@@ -221,7 +221,7 @@ const startValidation = (onSuccess) => {
           showMessage(true);
           unblockSubmitButton();
         },
-        new FormData(evt.target),
+        formData,
       );
     }
   });
