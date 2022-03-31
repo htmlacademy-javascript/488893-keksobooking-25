@@ -1,9 +1,12 @@
+const DATA_PATCH = 'https://25.javascript.pages.academy/keksobooking/data';
+const SERVER_PATCH = 'https://25.javascript.pages.academy/keksobooking';
+
 /**
 * Функция получения данных с сервера HTML Academy.
 * @param {function} onSuccess - Collback функция.
 */
 const getData = (onSuccess) => {
-  fetch('https://25.javascript.pages.academy/keksobooking/data')
+  fetch(DATA_PATCH)
     .then((response) => response.json())
     .then((offers) => {
       onSuccess(offers);
@@ -18,9 +21,10 @@ const getData = (onSuccess) => {
 */
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    'https://25.javascript.pages.academy/keksobooking',
+    SERVER_PATCH,
     {
       method: 'POST',
+      mode: 'no-cors',
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -31,11 +35,11 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз');
+        onFail();
       }
     })
     .catch(() => {
-      onFail('Не удалось отправить форму. Попробуйте ещё раз');
+      onFail();
     });
 };
 
