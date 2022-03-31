@@ -203,16 +203,14 @@ const unblockSubmitButton = () => {
 /* Запуск валидации
   ========================================================================== */
 
-const startValidation = (onSuccess) => {
+const startValidation = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    const formData = new FormData(evt.target);
     const isValid = pristine.validate();
     if (isValid) {
       blockSubmitButton();
       sendData(
         () => {
-          onSuccess();
           showMessage();
           unblockSubmitButton();
           resetForm();
@@ -221,7 +219,7 @@ const startValidation = (onSuccess) => {
           showMessage(true);
           unblockSubmitButton();
         },
-        formData,
+        new FormData(evt.target),
       );
     }
   });

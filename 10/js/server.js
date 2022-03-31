@@ -24,10 +24,6 @@ const sendData = (onSuccess, onFail, body) => {
     SERVER_PATCH,
     {
       method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
       body,
     },
   )
