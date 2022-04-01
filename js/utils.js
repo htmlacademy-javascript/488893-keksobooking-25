@@ -46,7 +46,7 @@ const showMessage = (isError) => {
  * Функция для устранения дребезга
  * @param {*} callback - Колбэк функция.
  * @param {*} timeoutDelay - Задержка выполнения функции.
- * @returns 
+ * @returns - Выполнение колбэк функции с задержкой.
  */
 function debounce (callback, timeoutDelay = 500) {
   let timeoutId;
