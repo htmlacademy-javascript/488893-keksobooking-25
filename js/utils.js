@@ -42,7 +42,22 @@ const showMessage = (isError) => {
   document.addEventListener('keydown', onKeydown);
 };
 
+/**
+ * Функция для устранения дребезга
+ * @param {*} callback - Колбэк функция.
+ * @param {*} timeoutDelay - Задержка выполнения функции.
+ * @returns 
+ */
+function debounce (callback, timeoutDelay = 500) {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
 export {
   isEscEvent,
-  showMessage
+  showMessage,
+  debounce
 };
