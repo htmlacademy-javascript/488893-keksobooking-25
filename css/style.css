@@ -432,6 +432,15 @@ fieldset {
   display: none;
 }
 
+.ad-form__element--error input,
+.ad-form__element--error select {
+  border-color: red;
+}
+
+.ad-form__error {
+  color: red;
+}
+
 .features legend {
   padding-bottom: 5px;
 }

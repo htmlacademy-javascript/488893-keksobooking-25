@@ -1,5 +1,4 @@
 import {setInactivePage, setActivePage} from './page-state.js';
-import {offersData} from './data.js';
 import {renderCard} from './card.js';
 
 setInactivePage();
@@ -11,16 +10,26 @@ const TOKYO_COORDINATES = {
   lat: 35.68302,
   lng: 139.75377,
 };
-const ZOOM_DEFAULT = 12.45;
+const ZOOM_DEFAULT = 13;
 const MAIN_PIN_SIZE = 52;
 const DEFAULT_PIN_SIZE = 40;
+
+const addressField = document.querySelector('#address');
 
 /* Определение карты и слоя для фильтров
   ========================================================================== */
 
+/**
+ * Функция возвращает текст с дефолтными координатами главной метки.
+ *
+ * @return {string} Координаты центра Токио в текстовом формате.
+ */
+const getDefaultCoordinates = () =>  `${TOKYO_COORDINATES.lat}, ${TOKYO_COORDINATES.lng}`;
+
 const map = L.map('map-canvas')
   .on('load', () => {
     setActivePage();
+    addressField.value = getDefaultCoordinates();
   })
   .setView(TOKYO_COORDINATES, ZOOM_DEFAULT);
 
@@ -72,10 +81,18 @@ const addOffersMarkers = (layer, data) => {
   });
 };
 
+/**
+ * Функция сброса значения центральной метки.
+ */
+const resetMarker = () => {
+  mainPinMarker.setLatLng(TOKYO_COORDINATES);
+  map.setView(TOKYO_COORDINATES, ZOOM_DEFAULT);
+};
+
 /* Создание карты и меток
   ========================================================================== */
 
-const createMap = () => {
+const createMap = (offersData) => {
   filterLayer.addTo(map);
   mainPinMarker.addTo(map);
   addOffersMarkers(map, offersData);
@@ -86,13 +103,6 @@ const createMap = () => {
     const coordinates = evt.target.getLatLng();
     address.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
   });
-
-  const resetButton = document.querySelector('.ad-form__reset');
-
-  resetButton.addEventListener('click', () => {
-    mainPinMarker.setLatLng(TOKYO_COORDINATES);
-    map.setView(TOKYO_COORDINATES, ZOOM_DEFAULT);
-  });
 };
 
-export {createMap};
+export {createMap, resetMarker, getDefaultCoordinates};
