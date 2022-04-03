@@ -5,6 +5,9 @@ const resetButton = form.querySelector('.ad-form__reset');
 const addressField = form.querySelector('#address');
 const formFilter = document.querySelector('.map__filters');
 const typeFilter = document.querySelector('#housing-type');
+const priceFilter = document.querySelector('#housing-price');
+const roomsFilter = document.querySelector('#housing-rooms');
+const guestsFilter = document.querySelector('#housing-guests');
 
 /**
  * Функция сбрасывает Форму в состояние по умолчанию.
@@ -30,15 +33,27 @@ const onResetEvent = (data) => {
 };
 
 /**
- * Событие изменения фильтра.
- * @param {object[]} data - Массив данных с объявлениями.
+ * Обновление карты при изменении фильтра.
+ * @param {object} element - Элемент фильтра в разметке.
+ * @param {object[]} data - Данные объявлений.
  */
-const onFilterChange = (data) => {
-  typeFilter.addEventListener('change', (evt) => {
+const onChange = (element, data) => {
+  element.addEventListener('change', (evt) => {
     evt.preventDefault();
     resetMapMarkers();
     addMapMarkers(data);
   });
+};
+
+/**
+ * Событие изменения фильтра.
+ * @param {object[]} data - Массив данных с объявлениями.
+ */
+const onFilterChange = (data) => {
+  onChange(typeFilter, data);
+  onChange(priceFilter, data);
+  onChange(roomsFilter, data);
+  onChange(guestsFilter, data);
 };
 
 export {onResetEvent, resetForm, onFilterChange};
