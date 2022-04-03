@@ -1,3 +1,5 @@
+import {resetMapMarkers, addMapMarkers} from './map.js';
+
 const DEFAULT = 'any';
 const priceRule = {
   'middle': {
@@ -14,6 +16,12 @@ const priceRule = {
   }
 };
 
+const typeFilter = document.querySelector('#housing-type');
+const priceFilter = document.querySelector('#housing-price');
+const roomsFilter = document.querySelector('#housing-rooms');
+const guestsFilter = document.querySelector('#housing-guests');
+const featuresFilter = document.querySelector('#housing-features');
+
 /**
  * Функция определения соответсвия объявления фильтру.
  * @param {object} offer - Значение типа жилья
@@ -21,17 +29,17 @@ const priceRule = {
 const getOffersRank = (offer) => {
   let rank = 0;
 
-  const type = document.querySelector('#housing-type').value;
-  const price = document.querySelector('#housing-price').value;
-  const rooms = document.querySelector('#housing-rooms').value;
-  const guests = document.querySelector('#housing-guests').value;
-  const features = document.querySelector('#housing-features');
-  const wifiFeature = features.querySelector('#filter-wifi');
-  const dishwasherFeature = features.querySelector('#filter-dishwasher');
-  const parkingFeature = features.querySelector('#filter-parking');
-  const washerFeature = features.querySelector('#filter-washer');
-  const elevatorFeature = features.querySelector('#filter-elevator');
-  const conditionerFeature = features.querySelector('#filter-conditioner');
+  const type = typeFilter.value;
+  const price = priceFilter.value;
+  const rooms = roomsFilter.value;
+  const guests = guestsFilter.value;
+
+  const wifiFeature = featuresFilter.querySelector('#filter-wifi');
+  const dishwasherFeature = featuresFilter.querySelector('#filter-dishwasher');
+  const parkingFeature = featuresFilter.querySelector('#filter-parking');
+  const washerFeature = featuresFilter.querySelector('#filter-washer');
+  const elevatorFeature = featuresFilter.querySelector('#filter-elevator');
+  const conditionerFeature = featuresFilter.querySelector('#filter-conditioner');
 
   const filters = [
     type !== DEFAULT,
@@ -95,4 +103,29 @@ const getOffersRank = (offer) => {
   return (rank >= filterCount) ? rank : 0;
 };
 
-export {getOffersRank};
+/**
+ * Обновление карты при изменении фильтра.
+ * @param {object} element - Элемент фильтра в разметке.
+ * @param {object[]} data - Данные объявлений.
+ */
+const onChange = (element, data) => {
+  element.addEventListener('change', (evt) => {
+    evt.preventDefault();
+    resetMapMarkers();
+    addMapMarkers(data);
+  });
+};
+
+/**
+ * Событие изменения фильтра.
+ * @param {object[]} data - Массив данных с объявлениями.
+ */
+const onFilterChange = (data) => {
+  onChange(typeFilter, data);
+  onChange(priceFilter, data);
+  onChange(roomsFilter, data);
+  onChange(guestsFilter, data);
+  onChange(featuresFilter, data);
+};
+
+export {getOffersRank, onFilterChange};
