@@ -13,6 +13,7 @@ const TOKYO_COORDINATES = {
 const ZOOM_DEFAULT = 13;
 const MAIN_PIN_SIZE = 52;
 const DEFAULT_PIN_SIZE = 40;
+const MAX_MARKERS = 10;
 
 const addressField = document.querySelector('#address');
 
@@ -67,18 +68,20 @@ const mainPinMarker = L.marker(TOKYO_COORDINATES, {
  * @param {object} data - Данные с объявлениями.
  */
 const addOffersMarkers = (layer, data) => {
-  data.forEach(({location, offer, author}) => {
-    const marker = L.marker(
-      location,
-      {
-        defaultPinIcon,
-      }
-    );
+  data
+    .slice(0, MAX_MARKERS)
+    .forEach(({location, offer, author}) => {
+      const marker = L.marker(
+        location,
+        {
+          defaultPinIcon,
+        }
+      );
 
-    marker
-      .addTo(layer)
-      .bindPopup(renderCard(author, offer));
-  });
+      marker
+        .addTo(layer)
+        .bindPopup(renderCard(author, offer));
+    });
 };
 
 /**
