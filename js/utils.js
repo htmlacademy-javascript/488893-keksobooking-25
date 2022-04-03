@@ -1,5 +1,6 @@
 const ESC_ALL_BROWSERS = 'Escape';
 const ESC_IE = 'Esc';
+const DEBOUNCE_TIME = 500;
 
 const successMessageTemplate = document.querySelector('#success')
   .content
@@ -48,7 +49,7 @@ const showMessage = (isError) => {
  * @param {*} timeoutDelay - Задержка выполнения функции.
  * @returns - Выполнение колбэк функции с задержкой.
  */
-function debounce (callback, timeoutDelay = 500) {
+function debounce (callback, timeoutDelay = DEBOUNCE_TIME) {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
