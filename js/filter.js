@@ -1,4 +1,5 @@
 import {resetMapMarkers, addMapMarkers} from './map.js';
+import {debounce} from './utils.js';
 
 const DEFAULT = 'any';
 const priceRule = {
@@ -25,6 +26,7 @@ const featuresFilter = document.querySelector('#housing-features');
 /**
  * Функция определения соответсвия объявления фильтру.
  * @param {object} offer - Значение типа жилья
+ * @returns {number} - Ранг обявления по фильтру.
  */
 const getOffersRank = (offer) => {
   let rank = 0;
@@ -104,15 +106,23 @@ const getOffersRank = (offer) => {
 };
 
 /**
- * Обновление карты при изменении фильтра.
- * @param {object} element - Элемент фильтра в разметке.
- * @param {object[]} data - Данные объявлений.
+ * Функция обновления карты после фильтрации.
+ * @param {object[]} data - Данные объявляений для отрисовки
  */
-const onChange = (element, data) => {
+const updateMap = (data) => {
+  resetMapMarkers();
+  addMapMarkers(data);
+};
+
+/**
+ * Событие при изменении фильтров.
+ * @param {object} element - Элемент фильтра в разметке.
+ * @param {object} cb - Функция collback.
+ */
+const onChange = (element, cb) => {
   element.addEventListener('change', (evt) => {
     evt.preventDefault();
-    resetMapMarkers();
-    addMapMarkers(data);
+    cb();
   });
 };
 
@@ -121,11 +131,11 @@ const onChange = (element, data) => {
  * @param {object[]} data - Массив данных с объявлениями.
  */
 const onFilterChange = (data) => {
-  onChange(typeFilter, data);
-  onChange(priceFilter, data);
-  onChange(roomsFilter, data);
-  onChange(guestsFilter, data);
-  onChange(featuresFilter, data);
+  onChange(typeFilter, debounce(() => updateMap(data)));
+  onChange(priceFilter, debounce(() => updateMap(data)));
+  onChange(roomsFilter, debounce(() => updateMap(data)));
+  onChange(guestsFilter, debounce(() => updateMap(data)));
+  onChange(featuresFilter, debounce(() => updateMap(data)));
 };
 
 export {getOffersRank, onFilterChange};
