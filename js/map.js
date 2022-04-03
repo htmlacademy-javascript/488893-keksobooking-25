@@ -1,6 +1,6 @@
 import {setInactivePage, setActivePage} from './page-state.js';
 import {renderCard} from './card.js';
-import {sortOffers, getOffersRank} from './filter.js';
+import {getOffersRank} from './filter.js';
 
 setInactivePage();
 
@@ -91,7 +91,6 @@ const addMapMarkers = (data) => {
   data
     .slice()
     .filter((element) => getOffersRank(element.offer) > 0)
-    .sort(sortOffers)
     .slice(0, MAX_MARKERS)
     .forEach(({location, offer, author}) => {
       createMarker(location, offer, author);

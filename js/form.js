@@ -8,6 +8,7 @@ const typeFilter = document.querySelector('#housing-type');
 const priceFilter = document.querySelector('#housing-price');
 const roomsFilter = document.querySelector('#housing-rooms');
 const guestsFilter = document.querySelector('#housing-guests');
+const featuresFilter = document.querySelector('#housing-features');
 
 /**
  * Функция сбрасывает Форму в состояние по умолчанию.
@@ -54,6 +55,7 @@ const onFilterChange = (data) => {
   onChange(priceFilter, data);
   onChange(roomsFilter, data);
   onChange(guestsFilter, data);
+  onChange(featuresFilter, data);
 };
 
 export {onResetEvent, resetForm, onFilterChange};

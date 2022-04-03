@@ -25,12 +25,25 @@ const getOffersRank = (offer) => {
   const price = document.querySelector('#housing-price').value;
   const rooms = document.querySelector('#housing-rooms').value;
   const guests = document.querySelector('#housing-guests').value;
+  const features = document.querySelector('#housing-features');
+  const wifiFeature = features.querySelector('#filter-wifi');
+  const dishwasherFeature = features.querySelector('#filter-dishwasher');
+  const parkingFeature = features.querySelector('#filter-parking');
+  const washerFeature = features.querySelector('#filter-washer');
+  const elevatorFeature = features.querySelector('#filter-elevator');
+  const conditionerFeature = features.querySelector('#filter-conditioner');
 
   const filters = [
     type !== DEFAULT,
     price !== DEFAULT,
     rooms !== DEFAULT,
     guests !== DEFAULT,
+    wifiFeature.checked,
+    dishwasherFeature.checked,
+    parkingFeature.checked,
+    washerFeature.checked,
+    elevatorFeature.checked,
+    conditionerFeature.checked
   ];
 
   const filterCount = filters.reduce((count, element) => count + element, 0);
@@ -40,35 +53,46 @@ const getOffersRank = (offer) => {
     return rank;
   }
 
-  if (type !== DEFAULT && offer.type === type) {
-    rank += 1;
-  }
+  const featureList = (offer.features) ? Array.from(offer.features) : '';
 
-  if (price !== DEFAULT && offer.price >= priceRule[price].min && offer.price <= priceRule[price].max ) {
-    rank += 1;
-  }
+  /**
+   * Проверка основных фильтров.
+   * @param {object} element - Значение проверяемого фильтра.
+   * @param {string} name - Наименование фильтра.
+   */
+  const filterCheck = (element, name) => {
+    switch (name) {
+      case 'price':
+        return element !== DEFAULT && offer[`${name}`] >= priceRule[price].min && offer[`${name}`] >= priceRule[price].max;
+      case 'rooms':
+      case 'guests':
+        return element !== DEFAULT && offer[`${name}`] === +element;
+      default:
+        return element !== DEFAULT && offer[`${name}`] === element;
+    }
+  };
 
-  if (rooms !== DEFAULT && offer.rooms === +rooms) {
-    rank += 1;
-  }
+  rank += filterCheck(type, 'type');
+  rank += filterCheck(price, 'price');
+  rank += filterCheck(rooms, 'rooms');
+  rank += filterCheck(guests, 'guests');
 
-  if (guests !== DEFAULT && offer.guests === +guests) {
-    rank += 1;
+  /**
+   * Проверка фильтра возможностей (feature).
+   * @param {object} feature - Возможность.
+   */
+  const featuresCheck = (feature) => feature.checked && featureList.includes(`${feature.value}`);
+
+  if (featureList) {
+    rank += featuresCheck(wifiFeature);
+    rank += featuresCheck(dishwasherFeature);
+    rank += featuresCheck(parkingFeature);
+    rank += featuresCheck(washerFeature);
+    rank += featuresCheck(elevatorFeature);
+    rank += featuresCheck(conditionerFeature);
   }
 
   return (rank >= filterCount) ? rank : 0;
 };
 
-/**
- * Функция сортировки объявлений.
- * @param {object} dataA - Объявление А.
- * @param {object} dataB - Объявление Б.
- * @returns - Новый порядок объявлений с учетом сравнения.
- */
-const sortOffers = (dataA, dataB) => {
-  const rankA = getOffersRank(dataA.offer);
-  const rankB = getOffersRank(dataB.offer);
-  return rankB - rankA;
-};
-
-export {sortOffers, getOffersRank};
+export {getOffersRank};
