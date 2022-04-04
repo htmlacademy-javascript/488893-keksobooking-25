@@ -26,7 +26,7 @@ const featuresFilter = document.querySelector('#housing-features');
 /**
  * Функция определения соответсвия объявления фильтру.
  * @param {object} offer - Значение типа жилья
- * @returns {number} - Ранг обявления по фильтру.
+ * @returns {number} - Ранг объявления по фильтру.
  */
 const getOffersRank = (offer) => {
   let rank = 0;
@@ -66,28 +66,28 @@ const getOffersRank = (offer) => {
   const featureList = (offer.features) ? Array.from(offer.features) : '';
 
   /**
-   * Проверка соответствия обьявления фильтру "Тип жилья".
+   * Проверка соответствия объявления фильтру "Тип жилья".
    * @param {object} element - Значение проверяемого фильтра.
    * @returns {boolean} - Соответсвие фильтру (True|False)
    */
   const typeCheck = (element) => element !== DEFAULT && offer.type === element;
 
   /**
-   * Проверка соответствия обьявления фильтру "Цена".
+   * Проверка соответствия объявления фильтру "Цена".
    * @param {object} element - Значение проверяемого фильтра.
    * @returns {boolean} - Соответсвие фильтру (True|False)
    */
   const priceCheck = (element) => element !== DEFAULT && offer.price >= priceRule[price].min && offer.price <= priceRule[price].max;
 
   /**
-   * Проверка соответствия обьявления фильтру "Число комнат".
+   * Проверка соответствия объявления фильтру "Число комнат".
    * @param {object} element - Значение проверяемого фильтра.
    * @returns {boolean} - Соответсвие фильтру (True|False)
    */
   const roomsCheck = (element) => element !== DEFAULT && offer.rooms === +element;
 
   /**
-   * Проверка соответствия обьявления фильтру "Число гостей".
+   * Проверка соответствия объявления фильтру "Число гостей".
    * @param {object} element - Значение проверяемого фильтра.
    * @returns {boolean} - Соответсвие фильтру (True|False)
    */
