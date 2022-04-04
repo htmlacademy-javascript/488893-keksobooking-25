@@ -95,8 +95,8 @@ const getOffersRank = (offer) => {
 
   rank += typeCheck(type);
   rank += priceCheck(price);
-  rank += roomsCheck(rooms, 'rooms');
-  rank += guestsCheck(guests, 'guests');
+  rank += roomsCheck(rooms);
+  rank += guestsCheck(guests);
 
   /**
    * Проверка фильтра возможностей (feature).
