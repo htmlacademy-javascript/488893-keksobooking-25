@@ -77,7 +77,7 @@ const getOffersRank = (offer) => {
    * @param {object} element - Значение проверяемого фильтра.
    * @returns {boolean} - Соответсвие фильтру (True|False)
    */
-  const priceCheck = (element) => element !== DEFAULT && offer.price >= priceRule[price].min && offer.price >= priceRule[price].max;
+  const priceCheck = (element) => element !== DEFAULT && offer.price >= priceRule[price].min && offer.price <= priceRule[price].max;
 
   /**
    * Проверка соответствия обьявления фильтру "Число комнат".
