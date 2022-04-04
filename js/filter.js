@@ -66,26 +66,37 @@ const getOffersRank = (offer) => {
   const featureList = (offer.features) ? Array.from(offer.features) : '';
 
   /**
-   * Проверка основных фильтров.
+   * Проверка соответствия обьявления фильтру "Тип жилья".
    * @param {object} element - Значение проверяемого фильтра.
-   * @param {string} name - Наименование фильтра.
+   * @returns {boolean} - Соответсвие фильтру (True|False)
    */
-  const filterCheck = (element, name) => {
-    switch (name) {
-      case 'price':
-        return element !== DEFAULT && offer[`${name}`] >= priceRule[price].min && offer[`${name}`] >= priceRule[price].max;
-      case 'rooms':
-      case 'guests':
-        return element !== DEFAULT && offer[`${name}`] === +element;
-      default:
-        return element !== DEFAULT && offer[`${name}`] === element;
-    }
-  };
+  const typeCheck = (element) => element !== DEFAULT && offer.type === element;
 
-  rank += filterCheck(type, 'type');
-  rank += filterCheck(price, 'price');
-  rank += filterCheck(rooms, 'rooms');
-  rank += filterCheck(guests, 'guests');
+  /**
+   * Проверка соответствия обьявления фильтру "Цена".
+   * @param {object} element - Значение проверяемого фильтра.
+   * @returns {boolean} - Соответсвие фильтру (True|False)
+   */
+  const priceCheck = (element) => element !== DEFAULT && offer.price >= priceRule[price].min && offer.price >= priceRule[price].max;
+
+  /**
+   * Проверка соответствия обьявления фильтру "Число комнат".
+   * @param {object} element - Значение проверяемого фильтра.
+   * @returns {boolean} - Соответсвие фильтру (True|False)
+   */
+  const roomsCheck = (element) => element !== DEFAULT && offer.rooms === +element;
+
+  /**
+   * Проверка соответствия обьявления фильтру "Число гостей".
+   * @param {object} element - Значение проверяемого фильтра.
+   * @returns {boolean} - Соответсвие фильтру (True|False)
+   */
+  const guestsCheck = (element) => element !== DEFAULT && offer.guests === +element;
+
+  rank += typeCheck(type);
+  rank += priceCheck(price);
+  rank += roomsCheck(rooms, 'rooms');
+  rank += guestsCheck(guests, 'guests');
 
   /**
    * Проверка фильтра возможностей (feature).

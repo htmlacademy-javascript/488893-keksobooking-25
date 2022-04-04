@@ -71,7 +71,7 @@ noUiSlider.create(sliderElement, {
     max: MAX_PRICE,
   },
   start: minPrice[typeField.value],
-  step: 100,
+  step: 1,
   connect: 'lower',
   format: {
     to: function (value) {
