@@ -71,7 +71,7 @@ noUiSlider.create(sliderElement, {
     max: MAX_PRICE,
   },
   start: minPrice[typeField.value],
-  step: 100,
+  step: 1,
   connect: 'lower',
   format: {
     to: function (value) {
@@ -203,7 +203,7 @@ const unblockSubmitButton = () => {
 /* Запуск валидации
   ========================================================================== */
 
-const startValidation = () => {
+const startValidation = (data) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
@@ -213,7 +213,7 @@ const startValidation = () => {
         () => {
           showMessage();
           unblockSubmitButton();
-          resetForm();
+          resetForm(data);
         },
         () => {
           showMessage(true);

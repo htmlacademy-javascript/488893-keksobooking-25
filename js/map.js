@@ -1,5 +1,6 @@
 import {setInactivePage, setActivePage} from './page-state.js';
 import {renderCard} from './card.js';
+import {getOffersRank} from './filter.js';
 
 setInactivePage();
 
@@ -13,6 +14,7 @@ const TOKYO_COORDINATES = {
 const ZOOM_DEFAULT = 13;
 const MAIN_PIN_SIZE = 52;
 const DEFAULT_PIN_SIZE = 40;
+const MAX_MARKERS = 10;
 
 const addressField = document.querySelector('#address');
 
@@ -33,7 +35,7 @@ const map = L.map('map-canvas')
   })
   .setView(TOKYO_COORDINATES, ZOOM_DEFAULT);
 
-const filterLayer = L.tileLayer(
+const tileLayer = L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -60,42 +62,63 @@ const mainPinMarker = L.marker(TOKYO_COORDINATES, {
   icon: mainPinIcon
 });
 
+const markerGroup = L.layerGroup().addTo(map);
+
 /**
- * Отрисовка меток и popup с описанием меток на слое карты.
- *
- * @param {object} layer - слой для добавления на него меток.
+ * Функция создания маркера.
+ * @param {object} point - Координаты метки.
+ * @param {object} data - Данные с обьявлением.
+ * @param {string} author - Автор объявления.
+ */
+const createMarker = (point, data, author) => {
+  const marker = L.marker(
+    point,
+    {
+      defaultPinIcon,
+    }
+  );
+
+  marker
+    .addTo(markerGroup)
+    .bindPopup(renderCard(author, data));
+};
+
+/**
+ * Отрисовка меток на слое карты.
  * @param {object} data - Данные с объявлениями.
  */
-const addOffersMarkers = (layer, data) => {
-  data.forEach(({location, offer, author}) => {
-    const marker = L.marker(
-      location,
-      {
-        defaultPinIcon,
-      }
-    );
-
-    marker
-      .addTo(layer)
-      .bindPopup(renderCard(author, offer));
-  });
+const addMapMarkers = (data) => {
+  data
+    .slice()
+    .filter((element) => getOffersRank(element.offer) > 0)
+    .slice(0, MAX_MARKERS)
+    .forEach(({location, offer, author}) => {
+      createMarker(location, offer, author);
+    });
 };
 
 /**
  * Функция сброса значения центральной метки.
  */
-const resetMarker = () => {
+const resetMainMarker = () => {
   mainPinMarker.setLatLng(TOKYO_COORDINATES);
   map.setView(TOKYO_COORDINATES, ZOOM_DEFAULT);
+};
+
+/**
+ * Функция сброса меток на карте.
+ */
+const resetMapMarkers = () => {
+  markerGroup.clearLayers();
 };
 
 /* Создание карты и меток
   ========================================================================== */
 
 const createMap = (offersData) => {
-  filterLayer.addTo(map);
+  tileLayer.addTo(map);
   mainPinMarker.addTo(map);
-  addOffersMarkers(map, offersData);
+  addMapMarkers(offersData);
 
   const address = document.querySelector('#address');
 
@@ -105,4 +128,10 @@ const createMap = (offersData) => {
   });
 };
 
-export {createMap, resetMarker, getDefaultCoordinates};
+export {
+  createMap,
+  resetMainMarker,
+  getDefaultCoordinates,
+  resetMapMarkers,
+  addMapMarkers
+};

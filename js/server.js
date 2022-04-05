@@ -1,12 +1,11 @@
-const DATA_PATCH = 'https://25.javascript.pages.academy/keksobooking/data';
-const SERVER_PATCH = 'https://25.javascript.pages.academy/keksobooking';
+const PATCH = 'https://25.javascript.pages.academy/keksobooking';
 
 /**
 * Функция получения данных с сервера HTML Academy.
 * @param {function} onSuccess - Collback функция.
 */
 const getData = (onSuccess) => {
-  fetch(DATA_PATCH)
+  fetch(`${PATCH}/data`)
     .then((response) => response.json())
     .then((offers) => {
       onSuccess(offers);
@@ -21,7 +20,7 @@ const getData = (onSuccess) => {
 */
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    SERVER_PATCH,
+    PATCH,
     {
       method: 'POST',
       body,
