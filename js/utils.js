@@ -21,16 +21,13 @@ const isEscEvent = (evt) => evt.key === ESC_ALL_BROWSERS || evt.key === ESC_IE;
 /**
 * Функция дбавления в DOM сообщения об успешности/ошибке отправки данных
 * на сервер.
-*
 * @param {boolean} isError - Признак ошибки.
 */
 const showMessage = (isError) => {
   const resultMessage = (isError) ? errorMessageTemplate.cloneNode(true) : successMessageTemplate.cloneNode(true);
   body.append(resultMessage);
 
-  resultMessage.addEventListener('click', () => {
-    resultMessage.remove();
-  });
+  resultMessage.addEventListener('click', () => resultMessage.remove());
 
   const onKeydown = (evt) => {
     if (isEscEvent(evt)) {
@@ -57,8 +54,21 @@ function debounce (callback, timeoutDelay = DEBOUNCE_TIME) {
   };
 }
 
+/**
+ * Событие при изменении элемента.
+ * @param {object} element - Элемент фильтра в разметке.
+ * @param {object} cb - Функция collback.
+ */
+const onChange = (element, cb) => {
+  element.addEventListener('change', (evt) => {
+    evt.preventDefault();
+    cb();
+  });
+};
+
 export {
   isEscEvent,
   showMessage,
-  debounce
+  debounce,
+  onChange
 };
