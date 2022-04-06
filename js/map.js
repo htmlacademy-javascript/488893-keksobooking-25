@@ -1,8 +1,6 @@
-import {setInactivePage, setActivePage} from './page-state.js';
+import {setActivePage} from './page-state.js';
 import {renderCard} from './card.js';
 import {getOffersRank} from './filter.js';
-
-setInactivePage();
 
 /* Настройки карты и меток
   ========================================================================== */
