@@ -24,6 +24,45 @@ const guestsFilter = document.querySelector('#housing-guests');
 const featuresFilter = document.querySelector('#housing-features');
 
 /**
+ * Проверка соответствия объявления фильтру "Тип жилья".
+ * @param {string} filter - Значение фильтра.
+ * @param {string} element - Текущее значение элемента.
+ * @returns {boolean} - Соответсвие фильтру (True|False)
+ */
+const typeCheck = (filter, element) => filter !== DEFAULT && filter === element;
+
+/**
+ * Проверка соответствия объявления фильтру "Число комнат".
+ * @param {string} filter - Значение фильтра.
+ * @param {number} element - Текущее значение элемента.
+ * @returns {boolean} - Соответсвие фильтру (True|False)
+ */
+const roomsCheck = (filter, element) => filter !== DEFAULT && element === +filter;
+
+/**
+ * Проверка соответствия объявления фильтру "Число гостей".
+ * @param {string} filter - Значение фильтра.
+ * @param {number} element - Текущее значение елемента.
+ * @returns {boolean} - Соответсвие фильтру (True|False)
+ */
+const guestsCheck = (filter, element) => filter !== DEFAULT && element === +filter;
+
+/**
+ * Проверка соответствия объявления фильтру "Цена".
+ * @param {string} filter - Значение фильтра.
+ * @param {number} element - Текущее значение елемента.
+ * @returns {boolean} - Соответсвие фильтру (True|False)
+ */
+const priceCheck = (filter, element) => filter !== DEFAULT && element >= priceRule[filter].min && element <= priceRule[filter].max;
+
+/**
+ * Проверка фильтра возможностей (feature).
+ * @param {object} filter - Значение фильтра.
+ * @param {object} element - Текущее значение елемента.
+ */
+const featuresCheck = (filter, element) => filter.checked && element.includes(`${filter.value}`);
+
+/**
  * Функция определения соответсвия объявления фильтру.
  * @param {object} offer - Значение типа жилья
  * @returns {number} - Ранг объявления по фильтру.
@@ -63,54 +102,20 @@ const getOffersRank = (offer) => {
     return rank;
   }
 
+  rank += typeCheck(type, offer.type);
+  rank += priceCheck(price, offer.price);
+  rank += roomsCheck(rooms, offer.rooms);
+  rank += guestsCheck(guests, offer.guests);
+
   const featureList = (offer.features) ? Array.from(offer.features) : '';
 
-  /**
-   * Проверка соответствия объявления фильтру "Тип жилья".
-   * @param {object} element - Значение проверяемого фильтра.
-   * @returns {boolean} - Соответсвие фильтру (True|False)
-   */
-  const typeCheck = (element) => element !== DEFAULT && offer.type === element;
-
-  /**
-   * Проверка соответствия объявления фильтру "Цена".
-   * @param {object} element - Значение проверяемого фильтра.
-   * @returns {boolean} - Соответсвие фильтру (True|False)
-   */
-  const priceCheck = (element) => element !== DEFAULT && offer.price >= priceRule[price].min && offer.price <= priceRule[price].max;
-
-  /**
-   * Проверка соответствия объявления фильтру "Число комнат".
-   * @param {object} element - Значение проверяемого фильтра.
-   * @returns {boolean} - Соответсвие фильтру (True|False)
-   */
-  const roomsCheck = (element) => element !== DEFAULT && offer.rooms === +element;
-
-  /**
-   * Проверка соответствия объявления фильтру "Число гостей".
-   * @param {object} element - Значение проверяемого фильтра.
-   * @returns {boolean} - Соответсвие фильтру (True|False)
-   */
-  const guestsCheck = (element) => element !== DEFAULT && offer.guests === +element;
-
-  rank += typeCheck(type);
-  rank += priceCheck(price);
-  rank += roomsCheck(rooms);
-  rank += guestsCheck(guests);
-
-  /**
-   * Проверка фильтра возможностей (feature).
-   * @param {object} feature - Возможность.
-   */
-  const featuresCheck = (feature) => feature.checked && featureList.includes(`${feature.value}`);
-
   if (featureList) {
-    rank += featuresCheck(wifiFeature);
-    rank += featuresCheck(dishwasherFeature);
-    rank += featuresCheck(parkingFeature);
-    rank += featuresCheck(washerFeature);
-    rank += featuresCheck(elevatorFeature);
-    rank += featuresCheck(conditionerFeature);
+    rank += featuresCheck(wifiFeature, featureList);
+    rank += featuresCheck(dishwasherFeature, featureList);
+    rank += featuresCheck(parkingFeature, featureList);
+    rank += featuresCheck(washerFeature, featureList);
+    rank += featuresCheck(elevatorFeature, featureList);
+    rank += featuresCheck(conditionerFeature, featureList);
   }
 
   return (rank >= filterCount) ? rank : 0;
