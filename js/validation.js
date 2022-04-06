@@ -36,8 +36,10 @@ const sliderElement = document.querySelector('.ad-form__slider');
 const priceField = form.querySelector('#price');
 const typeField = form.querySelector('#type');
 const MAX_PRICE = 100000;
+const MIN_PRICE = 0;
+const PRICE_STEP = 100;
 const minPrice = {
-  'bungalow': 0,
+  'bungalow': MIN_PRICE,
   'flat': 1000,
   'hotel': 3000,
   'house': 5000,
@@ -67,11 +69,11 @@ pristine.addValidator(priceField, validatePrice, getPriceErrorMessage);
 
 noUiSlider.create(sliderElement, {
   range: {
-    min: minPrice[typeField.value],
+    min: MIN_PRICE,
     max: MAX_PRICE,
   },
   start: minPrice[typeField.value],
-  step: 100,
+  step: PRICE_STEP,
   connect: 'lower',
   format: {
     to: function (value) {
@@ -194,9 +196,10 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
-/* Запуск валидации
-  ========================================================================== */
-
+/**
+ * Запуск вализации на форме.
+ * @param {object} data - Данные с объявлениями.
+ */
 const startValidation = (data) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
