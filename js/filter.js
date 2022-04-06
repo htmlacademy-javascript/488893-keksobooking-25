@@ -1,5 +1,5 @@
 import {resetMapMarkers, addMapMarkers} from './map.js';
-import {debounce} from './utils.js';
+import {debounce, onChange} from './utils.js';
 
 const DEFAULT = 'any';
 const priceRule = {
@@ -128,18 +128,6 @@ const getOffersRank = (offer) => {
 const updateMap = (data) => {
   resetMapMarkers();
   addMapMarkers(data);
-};
-
-/**
- * Событие при изменении фильтров.
- * @param {object} element - Элемент фильтра в разметке.
- * @param {object} cb - Функция collback.
- */
-const onChange = (element, cb) => {
-  element.addEventListener('change', (evt) => {
-    evt.preventDefault();
-    cb();
-  });
 };
 
 /**
