@@ -8,7 +8,6 @@ const sliderElement = document.querySelector('.ad-form__slider');
 
 /**
  * Функция перевода страницы в неактивное состояние.
- *
  */
 const setInactivePage = () => {
   adForm.classList.add('ad-form--disabled');
@@ -21,7 +20,6 @@ const setInactivePage = () => {
 
 /**
  * Функция перевода страницы в активное состояние.
- *
  */
 const setActivePage = () => {
   adForm.classList.remove('ad-form--disabled');
