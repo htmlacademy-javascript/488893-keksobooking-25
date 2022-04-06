@@ -3,12 +3,16 @@ const PATCH = 'https://25.javascript.pages.academy/keksobooking';
 /**
 * Функция получения данных с сервера HTML Academy.
 * @param {function} onSuccess - Collback функция.
+* @param {object} onFail - Collback функция при ошибке отправки данных.
 */
-const getData = (onSuccess) => {
+const getData = (onSuccess, onFail) => {
   fetch(`${PATCH}/data`)
     .then((response) => response.json())
     .then((offers) => {
       onSuccess(offers);
+    })
+    .catch(() => {
+      onFail();
     });
 };
 
