@@ -7,15 +7,22 @@ const filterFeatures = mapFilterFieldset.querySelectorAll('.map__feature');
 const sliderElement = document.querySelector('.ad-form__slider');
 
 /**
+ * Перевод формы с фильтрами в неактивное состояние.
+ */
+const setInactiveFilterForm = () => {
+  mapFilterSelectors.forEach((element) => element.setAttribute('disabled', 'disabled'));
+  mapFilterFieldset.setAttribute('disabled', 'disabled');
+  filterFeatures.forEach((element) => element.classList.add('map__filters--disabled'));
+};
+
+/**
  * Функция перевода страницы в неактивное состояние.
  */
 const setInactivePage = () => {
   adForm.classList.add('ad-form--disabled');
   adFormFieldsets.forEach((element) => element.setAttribute('disabled', 'disabled'));
-  mapFilterSelectors.forEach((element) => element.setAttribute('disabled', 'disabled'));
-  mapFilterFieldset.setAttribute('disabled', 'disabled');
-  filterFeatures.forEach((element) => element.classList.add('map__filters--disabled'));
   sliderElement.setAttribute('disabled', true);
+  setInactiveFilterForm();
 };
 
 /**
@@ -32,4 +39,4 @@ const setActivePage = () => {
 
 setInactivePage();
 
-export {setActivePage};
+export {setActivePage, setInactiveFilterForm};
