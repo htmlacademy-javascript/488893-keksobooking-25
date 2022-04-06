@@ -93,12 +93,6 @@ sliderElement.noUiSlider.on('update', () => {
  */
 function onTypeChange () {
   priceField.placeholder = minPrice[this.value];
-  sliderElement.noUiSlider.updateOptions({
-    range: {
-      min: minPrice[typeField.value],
-      max: MAX_PRICE,
-    }
-  });
   pristine.validate(priceField);
 }
 
