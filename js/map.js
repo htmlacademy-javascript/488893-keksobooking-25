@@ -113,10 +113,9 @@ const resetMapMarkers = () => {
 /* Создание карты и меток
   ========================================================================== */
 
-const createMap = (offersData) => {
+const mapInit = (cb) => {
   tileLayer.addTo(map);
   mainPinMarker.addTo(map);
-  addMapMarkers(offersData);
 
   const address = document.querySelector('#address');
 
@@ -124,12 +123,24 @@ const createMap = (offersData) => {
     const coordinates = evt.target.getLatLng();
     address.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
   });
+
+  cb();
+};
+
+/**
+ * Функция обновления карты после фильтрации.
+ * @param {object[]} data - Данные объявляений для отрисовки
+ */
+const updateMap = (data) => {
+  resetMapMarkers();
+  addMapMarkers(data);
 };
 
 export {
-  createMap,
+  mapInit,
   resetMainMarker,
   getDefaultCoordinates,
   resetMapMarkers,
-  addMapMarkers
+  addMapMarkers,
+  updateMap
 };

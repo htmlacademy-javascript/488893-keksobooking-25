@@ -59,7 +59,7 @@ function debounce (callback, timeoutDelay = DEBOUNCE_TIME) {
  * @param {object} element - Элемент фильтра в разметке.
  * @param {object} cb - Функция collback.
  */
-const onChange = (element, cb) => {
+const addChangeListener = (element, cb) => {
   element.addEventListener('change', (evt) => {
     evt.preventDefault();
     cb();
@@ -70,5 +70,5 @@ export {
   isEscEvent,
   showMessage,
   debounce,
-  onChange
+  addChangeListener
 };

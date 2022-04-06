@@ -30,46 +30,39 @@ const resetForm = (data) => {
 /**
  * Событие сброса состояния формы, фильтров и карты.
  */
-const onResetEvent = (cb) => {
+const addResetListener = (cb) => {
   resetButton.addEventListener('click', (evt) => {
     evt.preventDefault();
     cb();
   });
 };
 
-/**
- * Событие обновления аватарки.
- */
-const onAvatarChange = () => {
-  avatarChoser.addEventListener('change', () => {
-    const file = avatarChoser.files[0];
-    const fileName = file.name.toLowerCase();
+avatarChoser.addEventListener('change', () => {
+  const file = avatarChoser.files[0];
+  const fileName = file.name.toLowerCase();
 
-    const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-    if (matches) {
-      avatarPreview.src = URL.createObjectURL(file);
-    }
-  });
+  if (matches) {
+    avatarPreview.src = URL.createObjectURL(file);
+  }
+});
+
+imagesChoser.addEventListener('change', () => {
+  const file = imagesChoser.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    imagesPreview.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
+    imagesPreview.style.backgroundSize = 'contain';
+    imagesPreview.style.backgroundPosition = 'center center';
+    imagesPreview.style.backgroundRepeat  = 'no-repeat';
+  }
+});
+
+export {
+  addResetListener,
+  resetForm,
 };
-
-/**
- * Событие обновления аватарки.
- */
-const onImagesChange = () => {
-  imagesChoser.addEventListener('change', () => {
-    const file = imagesChoser.files[0];
-    const fileName = file.name.toLowerCase();
-
-    const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
-
-    if (matches) {
-      imagesPreview.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
-      imagesPreview.style.backgroundSize = 'contain';
-      imagesPreview.style.backgroundPosition = 'center center';
-      imagesPreview.style.backgroundRepeat  = 'no-repeat';
-    }
-  });
-};
-
-export {onResetEvent, resetForm, onAvatarChange, onImagesChange};

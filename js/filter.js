@@ -1,5 +1,5 @@
-import {resetMapMarkers, addMapMarkers} from './map.js';
-import {debounce, onChange} from './utils.js';
+import {updateMap} from './map.js';
+import {debounce, addChangeListener} from './utils.js';
 
 const DEFAULT = 'any';
 const priceRule = {
@@ -122,24 +122,15 @@ const getOffersRank = (offer) => {
 };
 
 /**
- * Функция обновления карты после фильтрации.
- * @param {object[]} data - Данные объявляений для отрисовки
- */
-const updateMap = (data) => {
-  resetMapMarkers();
-  addMapMarkers(data);
-};
-
-/**
- * Событие изменения фильтра.
+ * Запуск отслеживания событий изменения фильтров.
  * @param {object[]} data - Массив данных с объявлениями.
  */
-const onFilterChange = (data) => {
-  onChange(typeFilter, debounce(() => updateMap(data)));
-  onChange(priceFilter, debounce(() => updateMap(data)));
-  onChange(roomsFilter, debounce(() => updateMap(data)));
-  onChange(guestsFilter, debounce(() => updateMap(data)));
-  onChange(featuresFilter, debounce(() => updateMap(data)));
+const addFilterListener = (data) => {
+  addChangeListener(typeFilter, debounce(() => updateMap(data)));
+  addChangeListener(priceFilter, debounce(() => updateMap(data)));
+  addChangeListener(roomsFilter, debounce(() => updateMap(data)));
+  addChangeListener(guestsFilter, debounce(() => updateMap(data)));
+  addChangeListener(featuresFilter, debounce(() => updateMap(data)));
 };
 
-export {getOffersRank, onFilterChange};
+export {getOffersRank, addFilterListener};
