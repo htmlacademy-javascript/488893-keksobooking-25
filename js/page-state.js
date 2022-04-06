@@ -9,10 +9,10 @@ const sliderElement = document.querySelector('.ad-form__slider');
 /**
  * Перевод формы с фильтрами в неактивное состояние.
  */
-const setInactiveFilterForm = () => {
-  mapFilterSelectors.forEach((element) => element.setAttribute('disabled', 'disabled'));
-  mapFilterFieldset.setAttribute('disabled', 'disabled');
-  filterFeatures.forEach((element) => element.classList.add('map__filters--disabled'));
+const activateFilterForm = () => {
+  mapFilterSelectors.forEach((element) => element.removeAttribute('disabled'));
+  mapFilterFieldset.removeAttribute('disabled');
+  filterFeatures.forEach((element) => element.classList.remove('map__filters--disabled'));
 };
 
 /**
@@ -22,7 +22,9 @@ const setInactivePage = () => {
   adForm.classList.add('ad-form--disabled');
   adFormFieldsets.forEach((element) => element.setAttribute('disabled', 'disabled'));
   sliderElement.setAttribute('disabled', true);
-  setInactiveFilterForm();
+  mapFilterSelectors.forEach((element) => element.setAttribute('disabled', 'disabled'));
+  mapFilterFieldset.setAttribute('disabled', 'disabled');
+  filterFeatures.forEach((element) => element.classList.add('map__filters--disabled'));
 };
 
 /**
@@ -31,12 +33,9 @@ const setInactivePage = () => {
 const setActivePage = () => {
   adForm.classList.remove('ad-form--disabled');
   adFormFieldsets.forEach((element) => element.removeAttribute('disabled'));
-  mapFilterSelectors.forEach((element) => element.removeAttribute('disabled'));
-  mapFilterFieldset.removeAttribute('disabled');
-  filterFeatures.forEach((element) => element.classList.remove('map__filters--disabled'));
   sliderElement.removeAttribute('disabled');
 };
 
 setInactivePage();
 
-export {setActivePage, setInactiveFilterForm};
+export {setActivePage, activateFilterForm};
