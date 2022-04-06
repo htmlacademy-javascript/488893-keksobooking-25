@@ -14,7 +14,8 @@ const avatarPreview = form.querySelector('.ad-form-header__preview img');
 const imagesPreview = document.querySelector('.ad-form__photo');
 
 /**
- * Функция сбрасывает Форму в состояние по умолчанию.
+ * Сброс всех фильтров и формы на странице.
+ * @param {object} data - Данные с объявлениями.
  */
 const resetForm = (data) => {
   form.reset();
