@@ -110,9 +110,10 @@ const resetMapMarkers = () => {
   markerGroup.clearLayers();
 };
 
-/* Создание карты и меток
-  ========================================================================== */
-
+/**
+ * Инициализация карты, отрисовка главного маркера.
+ * @param {*} cb - Функция колбек.
+ */
 const mapInit = (cb) => {
   tileLayer.addTo(map);
   mainPinMarker.addTo(map);
