@@ -1,6 +1,5 @@
 import {sendData} from './server.js';
 import {showMessage} from './utils.js';
-import {resetForm} from './form.js';
 
 const form = document.querySelector('.ad-form');
 
@@ -198,9 +197,9 @@ const unblockSubmitButton = () => {
 
 /**
  * Запуск вализации на форме.
- * @param {object} data - Данные с объявлениями.
+ * @param {object} cb - Фунция колбек.
  */
-const startValidation = (data) => {
+const startValidation = (cb) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
@@ -210,7 +209,9 @@ const startValidation = (data) => {
         () => {
           showMessage();
           unblockSubmitButton();
-          resetForm(data);
+          if (cb) {
+            cb();
+          }
         },
         () => {
           showMessage(true);

@@ -25,7 +25,9 @@ const resetForm = (data) => {
   formFilter.reset();
   resetMainMarker();
   resetMapMarkers();
-  addMapMarkers(data);
+  if (data) {
+    addMapMarkers(data);
+  }
 };
 
 /**

@@ -19,12 +19,38 @@ const body = document.querySelector('body');
 const isEscEvent = (evt) => evt.key === ESC_ALL_BROWSERS || evt.key === ESC_IE;
 
 /**
-* Функция дбавления в DOM сообщения об успешности/ошибке отправки данных
+* Функция добавления в DOM сообщения об успешности/ошибке отправки данных
 * на сервер.
 * @param {boolean} isError - Признак ошибки.
 */
 const showMessage = (isError) => {
   const resultMessage = (isError) ? errorMessageTemplate.cloneNode(true) : successMessageTemplate.cloneNode(true);
+  body.append(resultMessage);
+
+  resultMessage.addEventListener('click', () => resultMessage.remove());
+
+  const onKeydown = (evt) => {
+    if (isEscEvent(evt)) {
+      evt.preventDefault();
+      document.removeEventListener('keydown', onKeydown);
+      resultMessage.remove();
+    }
+  };
+
+  document.addEventListener('keydown', onKeydown);
+};
+
+/**
+* Функция добавления в DOM сообщения об ошибке получения данных
+* с сервера.
+*/
+const showErrorMessage = () => {
+  const resultMessage = errorMessageTemplate.cloneNode(true);
+  const textMessage = resultMessage.querySelector('.error__message');
+  const buttonMessage = resultMessage.querySelector('.error__button');
+  textMessage.textContent = 'Ошибка получения данных с сервера';
+  buttonMessage.remove();
+
   body.append(resultMessage);
 
   resultMessage.addEventListener('click', () => resultMessage.remove());
@@ -69,6 +95,7 @@ const addChangeListener = (element, cb) => {
 export {
   isEscEvent,
   showMessage,
+  showErrorMessage,
   debounce,
   addChangeListener
 };
