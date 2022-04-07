@@ -52,12 +52,8 @@ noUiSlider.create(sliderElement, {
   step: PRICE_STEP,
   connect: 'lower',
   format: {
-    to: function (value) {
-      return value.toFixed(0);
-    },
-    from: function (value) {
-      return parseFloat(value);
-    },
+    to: (value) => value.toFixed(0),
+    from: (value) => parseFloat(value),
   },
 });
 
@@ -71,28 +67,26 @@ sliderElement.noUiSlider.on('update', () => {
  * @param {string} value - Текст.
  * @returns {boolean} - Результат валидации.
  */
-function validateTitle (value) {
-  return value.length >= 30 && value.length <= 100;
-}
+const validateTitle = (value) => value.length >= 30 && value.length <= 100;
 
 /**
  * Валидация минимального и максимального занчения "Цены за ночь"
  * @param {number} value - Значение.
  * @returns {boolean} - Результат валидации.
  */
-function validatePrice (value) {
+const validatePrice = (value) => {
   const unit = formElement.querySelector('#type');
   return value.length && parseInt(value, 10) >= minPrice[unit.value] && parseInt(value, 10) <= MAX_PRICE;
-}
+};
 
 /**
  * Получение сообщения ошибки валидации "Цены за ночь"
  * @returns {string} - строка с сообщением об ошибке
  */
-function getPriceErrorMessage () {
+const getPriceErrorMessage = () => {
   const unit = formElement.querySelector('#type');
   return `Цена от ${minPrice[unit.value]} до ${MAX_PRICE}`;
-}
+};
 
 /**
  * Перезапуск валидации "Цены за ночь" при обновлении типа жилья.
@@ -113,20 +107,18 @@ function onPriceChange () {
  * Валидация вместимости гостей в соответствии с выбранным количеством комнат.
  * @returns {boolean} - Результат валидации.
  */
-function validateCapacity () {
-  return guestRestrictions[roomElement.value].includes(capacityElement.value);
-}
+const validateCapacity = () => guestRestrictions[roomElement.value].includes(capacityElement.value);
 
 /**
  * Получение сообщения ошибки валидации "Количества гостей".
  * @returns {string} - Текст ошибки.
  */
-function getCapacityErrorMessage () {
+const getCapacityErrorMessage = () => {
   if (roomElement.value === '100') {
     return 'Комнаты не для гостей';
   }
   return `${(roomElement.value === '1') ? 'Комната' : 'Комнаты'} для ${guestRestrictions[roomElement.value][0]} ${(guestRestrictions[roomElement.value][0] === '1') ? 'гостя' : 'гостей'} максимум`;
-}
+};
 
 /**
  * Перезапуск валидации "Количества гостей" при обновлении количества комнат.
@@ -139,16 +131,16 @@ function onRoomChange () {
 /**
  * Изменение времени выезда при изменении времени заезда.
  */
-function onTimeInChange () {
+const onTimeInChange = () => {
   timeinElement.value = timeoutElement.value;
-}
+};
 
 /**
  * Изменение времени заезда при изменении времени выезда.
  */
-function onTimeOutChange () {
+const onTimeOutChange = () => {
   timeoutElement.value = timeinElement.value;
-}
+};
 
 /**
  * Блокировка кнопки "Опубликовать" при отправке формы.
