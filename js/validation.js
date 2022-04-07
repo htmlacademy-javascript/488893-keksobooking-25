@@ -104,6 +104,13 @@ function onPriceChange () {
 }
 
 /**
+ * Сброс слайдера.
+ */
+const onSliderReset = () => {
+  sliderElement.noUiSlider.reset();
+};
+
+/**
  * Валидация вместимости гостей в соответствии с выбранным количеством комнат.
  * @returns {boolean} - Результат валидации.
  */
@@ -196,4 +203,4 @@ const startValidation = (cb) => {
   });
 };
 
-export {startValidation};
+export {startValidation, onSliderReset};
