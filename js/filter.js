@@ -2,7 +2,7 @@ import {updateMap} from './map.js';
 import {debounce, addChangeListener} from './utils.js';
 
 const DEFAULT = 'any';
-const priceRule = {
+const apartmentPrice = {
   'middle': {
     min: 10000,
     max: 50000
@@ -17,11 +17,18 @@ const priceRule = {
   }
 };
 
-const typeFilter = document.querySelector('#housing-type');
-const priceFilter = document.querySelector('#housing-price');
-const roomsFilter = document.querySelector('#housing-rooms');
-const guestsFilter = document.querySelector('#housing-guests');
-const featuresFilter = document.querySelector('#housing-features');
+const typeElement = document.querySelector('#housing-type');
+const priceElement = document.querySelector('#housing-price');
+const roomsElement = document.querySelector('#housing-rooms');
+const guestsElement = document.querySelector('#housing-guests');
+const featuresElement = document.querySelector('#housing-features');
+
+const filterWifiElement = featuresElement.querySelector('#filter-wifi');
+const filterDishwasherElement = featuresElement.querySelector('#filter-dishwasher');
+const filterParkingElement = featuresElement.querySelector('#filter-parking');
+const filterWasherElement = featuresElement.querySelector('#filter-washer');
+const filterElevatorElement = featuresElement.querySelector('#filter-elevator');
+const filterConditionerElement = featuresElement.querySelector('#filter-conditioner');
 
 /**
  * Проверка соответствия объявления фильтру "Тип жилья".
@@ -29,7 +36,7 @@ const featuresFilter = document.querySelector('#housing-features');
  * @param {string} element - Текущее значение элемента.
  * @returns {boolean} - Соответсвие фильтру (True|False)
  */
-const typeCheck = (filter, element) => filter !== DEFAULT && filter === element;
+const checkType = (filter, element) => filter !== DEFAULT && filter === element;
 
 /**
  * Проверка соответствия объявления фильтру "Число комнат".
@@ -37,15 +44,7 @@ const typeCheck = (filter, element) => filter !== DEFAULT && filter === element;
  * @param {number} element - Текущее значение элемента.
  * @returns {boolean} - Соответсвие фильтру (True|False)
  */
-const roomsCheck = (filter, element) => filter !== DEFAULT && element === +filter;
-
-/**
- * Проверка соответствия объявления фильтру "Число гостей".
- * @param {string} filter - Значение фильтра.
- * @param {number} element - Текущее значение елемента.
- * @returns {boolean} - Соответсвие фильтру (True|False)
- */
-const guestsCheck = (filter, element) => filter !== DEFAULT && element === +filter;
+const checkRoomsOrGuests = (filter, element) => filter !== DEFAULT && element === +filter;
 
 /**
  * Проверка соответствия объявления фильтру "Цена".
@@ -53,46 +52,39 @@ const guestsCheck = (filter, element) => filter !== DEFAULT && element === +filt
  * @param {number} element - Текущее значение елемента.
  * @returns {boolean} - Соответсвие фильтру (True|False)
  */
-const priceCheck = (filter, element) => filter !== DEFAULT && element >= priceRule[filter].min && element <= priceRule[filter].max;
+const checkPrice = (filter, element) => filter !== DEFAULT && element >= apartmentPrice[filter].min && element <= apartmentPrice[filter].max;
 
 /**
  * Проверка фильтра возможностей (feature).
  * @param {object} filter - Значение фильтра.
  * @param {object} element - Текущее значение елемента.
  */
-const featuresCheck = (filter, element) => filter.checked && element.includes(`${filter.value}`);
+const checkFeatures= (filter, element) => filter.checked && element.includes(`${filter.value}`);
 
 /**
  * Функция определения соответсвия объявления фильтру.
- * @param {object} offer - Значение типа жилья
+ * @param {object} data - Значение типа жилья
  * @returns {number} - Ранг объявления по фильтру.
  */
-const getOffersRank = (offer) => {
+const getOffersRank = (data) => {
   let rank = 0;
 
-  const type = typeFilter.value;
-  const price = priceFilter.value;
-  const rooms = roomsFilter.value;
-  const guests = guestsFilter.value;
-
-  const wifiFeature = featuresFilter.querySelector('#filter-wifi');
-  const dishwasherFeature = featuresFilter.querySelector('#filter-dishwasher');
-  const parkingFeature = featuresFilter.querySelector('#filter-parking');
-  const washerFeature = featuresFilter.querySelector('#filter-washer');
-  const elevatorFeature = featuresFilter.querySelector('#filter-elevator');
-  const conditionerFeature = featuresFilter.querySelector('#filter-conditioner');
+  const type = typeElement.value;
+  const price = priceElement.value;
+  const rooms = roomsElement.value;
+  const guests = guestsElement.value;
 
   const filters = [
     type !== DEFAULT,
     price !== DEFAULT,
     rooms !== DEFAULT,
     guests !== DEFAULT,
-    wifiFeature.checked,
-    dishwasherFeature.checked,
-    parkingFeature.checked,
-    washerFeature.checked,
-    elevatorFeature.checked,
-    conditionerFeature.checked
+    filterWifiElement.checked,
+    filterDishwasherElement.checked,
+    filterParkingElement.checked,
+    filterWasherElement.checked,
+    filterElevatorElement.checked,
+    filterConditionerElement.checked
   ];
 
   const filterCount = filters.reduce((count, element) => count + element, 0);
@@ -102,20 +94,20 @@ const getOffersRank = (offer) => {
     return rank;
   }
 
-  rank += typeCheck(type, offer.type);
-  rank += priceCheck(price, offer.price);
-  rank += roomsCheck(rooms, offer.rooms);
-  rank += guestsCheck(guests, offer.guests);
+  rank += checkType(type, data.type);
+  rank += checkPrice(price, data.price);
+  rank += checkRoomsOrGuests(rooms, data.rooms);
+  rank += checkRoomsOrGuests(guests, data.guests);
 
-  const featureList = (offer.features) ? Array.from(offer.features) : '';
+  const featureList = (data.features) ? Array.from(data.features) : '';
 
   if (featureList) {
-    rank += featuresCheck(wifiFeature, featureList);
-    rank += featuresCheck(dishwasherFeature, featureList);
-    rank += featuresCheck(parkingFeature, featureList);
-    rank += featuresCheck(washerFeature, featureList);
-    rank += featuresCheck(elevatorFeature, featureList);
-    rank += featuresCheck(conditionerFeature, featureList);
+    rank += checkFeatures(filterWifiElement, featureList);
+    rank += checkFeatures(filterDishwasherElement, featureList);
+    rank += checkFeatures(filterParkingElement, featureList);
+    rank += checkFeatures(filterWasherElement, featureList);
+    rank += checkFeatures(filterElevatorElement, featureList);
+    rank += checkFeatures(filterConditionerElement, featureList);
   }
 
   return (rank >= filterCount) ? rank : 0;
@@ -126,11 +118,11 @@ const getOffersRank = (offer) => {
  * @param {object[]} data - Массив данных с объявлениями.
  */
 const addFilterListener = (data) => {
-  addChangeListener(typeFilter, debounce(() => updateMap(data)));
-  addChangeListener(priceFilter, debounce(() => updateMap(data)));
-  addChangeListener(roomsFilter, debounce(() => updateMap(data)));
-  addChangeListener(guestsFilter, debounce(() => updateMap(data)));
-  addChangeListener(featuresFilter, debounce(() => updateMap(data)));
+  addChangeListener(typeElement, debounce(() => updateMap(data)));
+  addChangeListener(priceElement, debounce(() => updateMap(data)));
+  addChangeListener(roomsElement, debounce(() => updateMap(data)));
+  addChangeListener(guestsElement, debounce(() => updateMap(data)));
+  addChangeListener(featuresElement, debounce(() => updateMap(data)));
 };
 
 export {getOffersRank, addFilterListener};

@@ -1,12 +1,16 @@
+
+import {activateFilterForm} from './page-state.js';
 import {getData} from './server.js';
-import {mapInit, addMapMarkers} from './map.js';
+import {initMap, addMapMarkers} from './map.js';
 import {resetForm, addResetListener} from './form.js';
 import {addFilterListener} from './filter.js';
 import {startValidation} from './validation.js';
 import {debounce, showErrorMessage} from './utils.js';
-import {activateFilterForm} from './page-state.js';
 
-const pageActivate = () => {
+/**
+ * Запуск ключевых функций после активации страницы.
+ */
+const activatePage = () => {
   getData(
     (offers) => {
       activateFilterForm();
@@ -22,4 +26,4 @@ const pageActivate = () => {
     });
 };
 
-mapInit(pageActivate);
+initMap(activatePage);

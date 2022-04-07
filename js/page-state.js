@@ -7,7 +7,7 @@ const filterFeatures = mapFilterFieldset.querySelectorAll('.map__feature');
 const sliderElement = document.querySelector('.ad-form__slider');
 
 /**
- * Перевод формы с фильтрами в неактивное состояние.
+ * Перевод формы с фильтрами в активное состояние.
  */
 const activateFilterForm = () => {
   mapFilterSelectors.forEach((element) => element.removeAttribute('disabled'));
@@ -16,7 +16,7 @@ const activateFilterForm = () => {
 };
 
 /**
- * Функция перевода страницы в неактивное состояние.
+ * Перевод страницы в неактивное состояние.
  */
 const setInactivePage = () => {
   adForm.classList.add('ad-form--disabled');
@@ -28,7 +28,7 @@ const setInactivePage = () => {
 };
 
 /**
- * Функция перевода страницы в активное состояние.
+ * Перевод страницы в активное состояние.
  */
 const setActivePage = () => {
   adForm.classList.remove('ad-form--disabled');

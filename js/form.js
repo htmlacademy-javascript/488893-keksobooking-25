@@ -2,27 +2,31 @@ import {resetMainMarker, getDefaultCoordinates, resetMapMarkers, addMapMarkers} 
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 const DEFAULT_IMG = 'img/muffin-grey.svg';
+const DEFAULT_PRICE = 5000;
 
-const form = document.querySelector('.ad-form');
-const resetButton = form.querySelector('.ad-form__reset');
-const addressField = form.querySelector('#address');
-const formFilter = document.querySelector('.map__filters');
+const formElement = document.querySelector('.ad-form');
+const resetElement = formElement.querySelector('.ad-form__reset');
+const addressElement = formElement.querySelector('#address');
+const mapFiltersElement = document.querySelector('.map__filters');
+const priceElement = document.querySelector('#price');
 
-const avatarChoser = form.querySelector('#avatar');
-const imagesChoser = document.querySelector('#images');
-const avatarPreview = form.querySelector('.ad-form-header__preview img');
-const imagesPreview = document.querySelector('.ad-form__photo');
+const avatarElement = formElement.querySelector('#avatar');
+const imagesElement = document.querySelector('#images');
+const previewElement = formElement.querySelector('.ad-form-header__preview img');
+const photoElement = document.querySelector('.ad-form__photo');
 
 /**
- * Сброс всех фильтров и формы на странице.
- * @param {object} data - Данные с объявлениями.
+ * Сброс всех фильтров, формы, карты.
+ * @param {object} data - Данные для обновления карты.
  */
 const resetForm = (data) => {
-  form.reset();
-  addressField.value = getDefaultCoordinates();
-  avatarPreview.src = DEFAULT_IMG;
-  imagesPreview.style.backgroundImage = 'none';
-  formFilter.reset();
+  formElement.reset();
+  addressElement.value = getDefaultCoordinates();
+  previewElement.src = DEFAULT_IMG;
+  photoElement.style.backgroundImage = 'none';
+  priceElement.setAttribute('placeholder', DEFAULT_PRICE);
+  priceElement.value = DEFAULT_PRICE;
+  mapFiltersElement.reset();
   resetMainMarker();
   resetMapMarkers();
   if (data) {
@@ -31,37 +35,38 @@ const resetForm = (data) => {
 };
 
 /**
- * Событие сброса состояния формы, фильтров и карты.
+ * Отслеживание нажатие кнопки Сброса.
+ * @param {object} cd - Collback функция.
  */
 const addResetListener = (cb) => {
-  resetButton.addEventListener('click', (evt) => {
+  resetElement.addEventListener('click', (evt) => {
     evt.preventDefault();
     cb();
   });
 };
 
-avatarChoser.addEventListener('change', () => {
-  const file = avatarChoser.files[0];
+avatarElement.addEventListener('change', () => {
+  const file = avatarElement.files[0];
   const fileName = file.name.toLowerCase();
 
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
   if (matches) {
-    avatarPreview.src = URL.createObjectURL(file);
+    previewElement.src = URL.createObjectURL(file);
   }
 });
 
-imagesChoser.addEventListener('change', () => {
-  const file = imagesChoser.files[0];
+imagesElement.addEventListener('change', () => {
+  const file = imagesElement.files[0];
   const fileName = file.name.toLowerCase();
 
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
   if (matches) {
-    imagesPreview.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
-    imagesPreview.style.backgroundSize = 'contain';
-    imagesPreview.style.backgroundPosition = 'center center';
-    imagesPreview.style.backgroundRepeat  = 'no-repeat';
+    photoElement.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
+    photoElement.style.backgroundSize = 'contain';
+    photoElement.style.backgroundPosition = 'center center';
+    photoElement.style.backgroundRepeat  = 'no-repeat';
   }
 });
 

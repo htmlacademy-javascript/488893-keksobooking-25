@@ -13,21 +13,24 @@ const errorMessageTemplate = document.querySelector('#error')
 const body = document.querySelector('body');
 
 /**
- * Функция проверяет событие нажатия клавишы ESC.
+ * Проверка нажатия клавишы ESC.
  * @returns {boolean}
  */
 const isEscEvent = (evt) => evt.key === ESC_ALL_BROWSERS || evt.key === ESC_IE;
 
 /**
-* Функция добавления в DOM сообщения об успешности/ошибке отправки данных
-* на сервер.
+* Добавление в DOM сообщения об успешности/ошибке отправки данных.
 * @param {boolean} isError - Признак ошибки.
 */
 const showMessage = (isError) => {
   const resultMessage = (isError) ? errorMessageTemplate.cloneNode(true) : successMessageTemplate.cloneNode(true);
   body.append(resultMessage);
 
-  resultMessage.addEventListener('click', () => resultMessage.remove());
+  const onClick = (evt) => {
+    evt.preventDefault();
+    resultMessage.removeEventListener('click', onClick);
+    resultMessage.remove();
+  };
 
   const onKeydown = (evt) => {
     if (isEscEvent(evt)) {
@@ -38,11 +41,11 @@ const showMessage = (isError) => {
   };
 
   document.addEventListener('keydown', onKeydown);
+  resultMessage.addEventListener('click', onClick);
 };
 
 /**
-* Функция добавления в DOM сообщения об ошибке получения данных
-* с сервера.
+* Добавление в DOM сообщения об ошибке получения данных.
 */
 const showErrorMessage = () => {
   const resultMessage = errorMessageTemplate.cloneNode(true);
@@ -53,7 +56,11 @@ const showErrorMessage = () => {
 
   body.append(resultMessage);
 
-  resultMessage.addEventListener('click', () => resultMessage.remove());
+  const onClick = (evt) => {
+    evt.preventDefault();
+    resultMessage.removeEventListener('click', onClick);
+    resultMessage.remove();
+  };
 
   const onKeydown = (evt) => {
     if (isEscEvent(evt)) {
@@ -64,26 +71,27 @@ const showErrorMessage = () => {
   };
 
   document.addEventListener('keydown', onKeydown);
+  resultMessage.addEventListener('click', onClick);
 };
 
 /**
- * Функция для устранения дребезга
- * @param {*} callback - Колбэк функция.
- * @param {*} timeoutDelay - Задержка выполнения функции.
- * @returns - Выполнение колбэк функции с задержкой.
+ * Устранения дребезга.
+ * @param {object} cb - Collback функция.
+ * @param {number} timeoutDelay - Задержка выполнения функции.
+ * @returns - Выполнение Collback функции с задержкой.
  */
-function debounce (callback, timeoutDelay = DEBOUNCE_TIME) {
+function debounce (cb, timeoutDelay = DEBOUNCE_TIME) {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+    timeoutId = setTimeout(() => cb.apply(this, rest), timeoutDelay);
   };
 }
 
 /**
- * Событие при изменении элемента.
- * @param {object} element - Элемент фильтра в разметке.
- * @param {object} cb - Функция collback.
+ * Отслеживание изменения элемента.
+ * @param {object} element - Отслеживаемый элемент.
+ * @param {object} cb - Collback функция.
  */
 const addChangeListener = (element, cb) => {
   element.addEventListener('change', (evt) => {
