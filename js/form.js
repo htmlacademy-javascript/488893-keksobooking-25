@@ -1,4 +1,5 @@
 import {resetMainMarker, getDefaultCoordinates, resetMapMarkers, addMapMarkers} from './map.js';
+import {onSliderReset} from './validation.js';
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 const DEFAULT_IMG = 'img/muffin-grey.svg';
@@ -29,6 +30,7 @@ const resetForm = (data) => {
   mapFiltersElement.reset();
   resetMainMarker();
   resetMapMarkers();
+  onSliderReset();
   if (data) {
     addMapMarkers(data);
   }
