@@ -1,4 +1,4 @@
-import {setActivePage} from './page-state.js';
+import {setActivePage} from './page.js';
 import {renderCard} from './card.js';
 import {getOffersRank} from './filter.js';
 

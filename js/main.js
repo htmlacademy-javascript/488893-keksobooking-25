@@ -1,5 +1,5 @@
 
-import {activateFilterForm} from './page-state.js';
+import {activateFilterForm} from './page.js';
 import {getData} from './server.js';
 import {initMap, addMapMarkers} from './map.js';
 import {resetForm, addResetListener} from './form.js';
