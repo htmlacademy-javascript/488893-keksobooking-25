@@ -13,10 +13,10 @@ const cardTemplate = document.querySelector('#card')
 const photoTemplate = cardTemplate.querySelector('.popup__photo');
 
 /**
- * Функция генерирующая блок фотографий для вставки в DOM.
+ * генерация блока фотографий для вставки в DOM.
  *
- * @param {Array} photos - Массив с URL адресами фотографий.
- * @return {object} - DOM фрагмент блока фотографий.
+ * @param {Array} photos - Массив с URL фотографий.
+ * @return {object} - DOM фрагмент.
  */
 const renderPhotos = (photos) => {
   const photoFragment = document.createDocumentFragment();
@@ -31,16 +31,16 @@ const renderPhotos = (photos) => {
 };
 
 /**
- * Функция генерирующая блок с возможностями Features.
+ * Генерация блока с Features для вставки в DOM.
  *
- * @param {object} containerBlock - NODE с элементами Features.
- * @param {object} features - список возможностей.
- * @return {object} - DOM фрагмент карточкой объявления.
+ * @param {object} container - NODE с элементами Features.
+ * @param {object} data - Данные для вставки в блок.
+ * @return {object} - DOM фрагмент.
  */
-const renderFeatures = (containerBlock, features) => {
-  const modifiers = features.map((element) => `popup__feature--${element}`);
+const renderFeatures = (container, data) => {
+  const modifiers = data.map((element) => `popup__feature--${element}`);
 
-  containerBlock.forEach((item) => {
+  container.forEach((item) => {
     const modifier = item.classList[1];
     if (!modifiers.includes(modifier)) {
       item.remove();
@@ -51,14 +51,16 @@ const renderFeatures = (containerBlock, features) => {
 };
 
 /**
- * Функция генерирующая отдельную карточку объявления для вставки в DOM.
+ * Генерация карточки объявления для вставки в DOM.
  *
- * @param {object} author - Обьект с данными автора (аватарка).
- * @param {object} offer - Обьект с данными объявления.
- * @return {object} - DOM фрагмент карточкой объявления.
+ * @param {object} author - Данные для вставки аватарки автора.
+ * @param {object} offer - Данные для вставки содержимого объявления.
+ * @return {object} - Элемент для вставки в DOM.
  */
 const renderCard = (author, offer) => {
   const card = cardTemplate.cloneNode(true);
+  const featuresElement = card.querySelector('.popup__features');
+  const featureList = featuresElement.querySelectorAll('.popup__feature');
 
   card.querySelector('.popup__avatar').src = author.avatar;
   card.querySelector('.popup__title').textContent = offer.title;
@@ -93,13 +95,10 @@ const renderCard = (author, offer) => {
     card.querySelector('.popup__text--time').remove();
   }
 
-  const featuresContainer = card.querySelector('.popup__features');
-  const featureList = featuresContainer.querySelectorAll('.popup__feature');
-
   if (offer.features) {
     renderFeatures(featureList, offer.features);
   } else {
-    featuresContainer.remove();
+    featuresElement.remove();
   }
 
   if (offer.description) {

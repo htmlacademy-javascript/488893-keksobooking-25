@@ -1,39 +1,30 @@
-import {setInactivePage, setActivePage} from './page-state.js';
+import {setActivePage} from './page.js';
 import {renderCard} from './card.js';
 import {getOffersRank} from './filter.js';
 
-setInactivePage();
-
-/* Настройки карты и меток
-  ========================================================================== */
-
-const TOKYO_COORDINATES = {
-  lat: 35.68302,
-  lng: 139.75377,
-};
 const ZOOM_DEFAULT = 13;
 const MAIN_PIN_SIZE = 52;
 const DEFAULT_PIN_SIZE = 40;
 const MAX_MARKERS = 10;
+const CenterMap = {
+  lat: 35.68302,
+  lng: 139.75377,
+};
 
 const addressField = document.querySelector('#address');
 
-/* Определение карты и слоя для фильтров
-  ========================================================================== */
-
 /**
- * Функция возвращает текст с дефолтными координатами главной метки.
- *
- * @return {string} Координаты центра Токио в текстовом формате.
+ * Получение текста с координатами центра карты.
+ * @return {string} - Текст с координатами центра карты .
  */
-const getDefaultCoordinates = () =>  `${TOKYO_COORDINATES.lat}, ${TOKYO_COORDINATES.lng}`;
+const getDefaultCoordinates = () =>  `${CenterMap.lat}, ${CenterMap.lng}`;
 
 const map = L.map('map-canvas')
   .on('load', () => {
     setActivePage();
     addressField.value = getDefaultCoordinates();
   })
-  .setView(TOKYO_COORDINATES, ZOOM_DEFAULT);
+  .setView(CenterMap, ZOOM_DEFAULT);
 
 const tileLayer = L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -41,9 +32,6 @@ const tileLayer = L.tileLayer(
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
 );
-
-/* Определение меток
-  ========================================================================== */
 
 const mainPinIcon = L.icon({
   iconUrl: '/img/main-pin.svg',
@@ -57,7 +45,7 @@ const defaultPinIcon = L.icon({
   iconAnchor: [DEFAULT_PIN_SIZE / 2, DEFAULT_PIN_SIZE],
 });
 
-const mainPinMarker = L.marker(TOKYO_COORDINATES, {
+const mainPinMarker = L.marker(CenterMap, {
   draggable: true,
   icon: mainPinIcon
 });
@@ -65,7 +53,7 @@ const mainPinMarker = L.marker(TOKYO_COORDINATES, {
 const markerGroup = L.layerGroup().addTo(map);
 
 /**
- * Функция создания маркера.
+ * Создание маркера.
  * @param {object} point - Координаты метки.
  * @param {object} data - Данные с обьявлением.
  * @param {string} author - Автор объявления.
@@ -98,40 +86,50 @@ const addMapMarkers = (data) => {
 };
 
 /**
- * Функция сброса значения центральной метки.
+ * Сброс значения центральной метки.
  */
 const resetMainMarker = () => {
-  mainPinMarker.setLatLng(TOKYO_COORDINATES);
-  map.setView(TOKYO_COORDINATES, ZOOM_DEFAULT);
+  mainPinMarker.setLatLng(CenterMap);
+  map.setView(CenterMap, ZOOM_DEFAULT);
 };
 
 /**
- * Функция сброса меток на карте.
+ * Сброс всех меток на карте.
  */
 const resetMapMarkers = () => {
   markerGroup.clearLayers();
 };
 
-/* Создание карты и меток
-  ========================================================================== */
-
-const createMap = (offersData) => {
+/**
+ * Инициализация карты, отрисовка главного маркера.
+ * @param {object} cb - Collback функция.
+ */
+const initMap = (cb) => {
   tileLayer.addTo(map);
   mainPinMarker.addTo(map);
-  addMapMarkers(offersData);
-
-  const address = document.querySelector('#address');
 
   mainPinMarker.on('moveend', (evt) => {
     const coordinates = evt.target.getLatLng();
-    address.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
+    addressField.value = `${coordinates.lat.toFixed(5)}, ${coordinates.lng.toFixed(5)}`;
   });
+
+  cb();
+};
+
+/**
+ * Обновление карты после фильтрации (сброс и отрисовка меток).
+ * @param {object} data - Данные для отрисовки меток.
+ */
+const updateMap = (data) => {
+  resetMapMarkers();
+  addMapMarkers(data);
 };
 
 export {
-  createMap,
+  initMap,
   resetMainMarker,
   getDefaultCoordinates,
   resetMapMarkers,
-  addMapMarkers
+  addMapMarkers,
+  updateMap
 };
