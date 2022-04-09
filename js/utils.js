@@ -16,7 +16,7 @@ const body = document.querySelector('body');
  * Проверка нажатия клавишы ESC.
  * @returns {boolean}
  */
-const isEscEvent = (evt) => evt.key === ESC_ALL_BROWSERS || evt.key === ESC_IE;
+const onEscKeydown = (evt) => evt.key === ESC_ALL_BROWSERS || evt.key === ESC_IE;
 
 /**
 * Добавление в DOM сообщения об успешности/ошибке отправки данных.
@@ -33,7 +33,7 @@ const showMessage = (isError) => {
   };
 
   const onKeydown = (evt) => {
-    if (isEscEvent(evt)) {
+    if (onEscKeydown(evt)) {
       evt.preventDefault();
       document.removeEventListener('keydown', onKeydown);
       resultMessage.remove();
@@ -63,7 +63,7 @@ const showErrorMessage = () => {
   };
 
   const onKeydown = (evt) => {
-    if (isEscEvent(evt)) {
+    if (onEscKeydown(evt)) {
       evt.preventDefault();
       document.removeEventListener('keydown', onKeydown);
       resultMessage.remove();
@@ -101,7 +101,6 @@ const addChangeListener = (element, cb) => {
 };
 
 export {
-  isEscEvent,
   showMessage,
   showErrorMessage,
   debounce,
