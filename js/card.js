@@ -51,6 +51,16 @@ const renderFeatures = (container, data) => {
 };
 
 /**
+ * Удаление всех дочерних элементов.
+ * @param {object} element - Родительский элемент.
+ */
+const removeAllChildren = (element) => {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+};
+
+/**
  * Генерация карточки объявления для вставки в DOM.
  *
  * @param {object} author - Данные для вставки аватарки автора.
@@ -61,6 +71,7 @@ const renderCard = (author, offer) => {
   const card = cardTemplate.cloneNode(true);
   const featuresElement = card.querySelector('.popup__features');
   const featureList = featuresElement.querySelectorAll('.popup__feature');
+  const photosElement = card.querySelector('.popup__photos');
 
   card.querySelector('.popup__avatar').src = author.avatar;
   card.querySelector('.popup__title').textContent = offer.title;
@@ -107,7 +118,7 @@ const renderCard = (author, offer) => {
     card.querySelector('.popup__description').remove();
   }
 
-  card.querySelector('.popup__photos').innerHTML = '';
+  removeAllChildren(photosElement);
   if (offer.photos) {
     card.querySelector('.popup__photos').appendChild(renderPhotos(offer.photos));
   } else {
