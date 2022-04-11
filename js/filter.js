@@ -64,7 +64,7 @@ const checkFeatures= (filter, element) => filter.checked && element.includes(`${
 /**
  * Функция определения соответсвия объявления фильтру.
  * @param {object} data - Значение типа жилья
- * @returns {number} - Ранг объявления по фильтру.
+ * @returns {number} - Ранг объявления.
  */
 const getOffersRank = (data) => {
   let rank = 0;
