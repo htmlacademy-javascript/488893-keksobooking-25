@@ -80,13 +80,13 @@ const showErrorMessage = () => {
  * @param {number} timeoutDelay - Задержка выполнения функции.
  * @returns - Выполнение Collback функции с задержкой.
  */
-function debounce (cb, timeoutDelay = DEBOUNCE_TIME) {
+const debounce = (cb, timeoutDelay = DEBOUNCE_TIME) => {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => cb.apply(this, rest), timeoutDelay);
+    timeoutId = setTimeout(() => cb.apply(null, rest), timeoutDelay);
   };
-}
+};
 
 /**
  * Отслеживание изменения элемента.
