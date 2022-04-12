@@ -92,7 +92,7 @@ const getPriceErrorMessage = () => {
  * Перезапуск валидации "Цены за ночь" при обновлении типа жилья.
  */
 const onTypeChange = (evt) => {
-  priceElement.placeholder = minPrice[evt.target.value];
+  priceElement.placeholder = minPrice[evt.currentTarget.value];
   pristine.validate(priceElement);
 };
 
@@ -100,7 +100,7 @@ const onTypeChange = (evt) => {
  * Изменение слайдера при обновлении "Цены за ночь".
  */
 const onPriceChange = (evt) => {
-  sliderElement.noUiSlider.set(evt.target.value);
+  sliderElement.noUiSlider.set(evt.currentTarget.value);
 };
 
 /**
@@ -131,7 +131,7 @@ const getCapacityErrorMessage = () => {
  * Перезапуск валидации "Количества гостей" при обновлении количества комнат.
  */
 const onRoomChange = (evt) => {
-  roomElement.placeholder = guestRestrictions[evt.target.value];
+  roomElement.placeholder = guestRestrictions[evt.currentTarget.value];
   pristine.validate(capacityElement);
 };
 
